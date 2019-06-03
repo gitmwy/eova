@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="http://127.0.0.1:801/ui2/src/css/layui.css"  media="all">
+<!--   <script src="http://127.0.0.1:801/ui2/layui/layui.all.js" charset="utf-8"></script> -->
+  <script src="http://127.0.0.1:801/ui2/src/layui.js" charset="utf-8"></script>
+  <script src="http://127.0.0.1:801/ui/js/jquery.min.js" charset="utf-8"></script>
+  <script src="http://127.0.0.1:801/ui/js/common.js" charset="utf-8"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+<!--   http://fly.layui.com/jie/27418/ -->
+<!-- http://127.0.0.1:801/3334.htm -->
+     <style>
+      .tags-item{
+    background-color: #eee; 
+    padding: 3px;
+    border-radius: 3px;
+    margin-right:3px;
+}
+.tags-input{
+    border: none;
+    height: 36px;
+    line-height: 1.3;
+}
+      
+    </style>
+</head>
+<body>
+ 
+<div class="layui-input">
+     <input type="text" id="tagsShow" placeholder="请输入关键词"  class="tags-input">
+</div>
+<!--   <input type="text" id="tagsValue"   > -->
+
+<br>
+<input type="hidden" id="tags"   >
+<br><br>
+<button class="layui-btn" id="add" value="add" lay-filter="myclick">+++</button>
+<button class="layui-btn" id="reduce" value="reduce" lay-filter="myclick">---</button>
+</body>
+<script>
+
+$('#tags').keypress(function(e){
+    if(e.keyCode==32){
+        $(this).before('<span class="tags-item"><span>'+'aa'+'</span><i class="layui-icon 1" value="1" lay-filter="myclick">&#x1006;</i>111 </span>');
+        $(this).val(';');
+     }
+});
+
+var index = 1;
+function add2(key,value){
+	key = index++;
+	$("#tagsShow").before('<span class="tags-item"><span>'+(key+'号')+'</span><i class="layui-icon tags" value="'+(key)+'" lay-filter="myclick">&#x1006;</i></span>');
+	
+	if($("#tags").val() == '')
+		$("#tags").val(key);
+	else
+		$("#tags").val($("#tags").val()+","+key);
+}
+
+var list = new Array();
+layui.use('layer', function(){
+    var $ = layui.jquery, layer = layui.layer;
+    $(document).on('click','#add',function(obj){
+    	//console.log(obj.target);
+      // layer.msg('hello:'+obj.target.value);
+      
+      //var a = $("#tags");
+      //var b = $("#tags")[0];
+      
+      //layer.msg(a.id+':'+b.id);
+      
+    	addTag($("#tagsShow"),$("#tags"),(index),index+"号");
+    	index++;
+    	//function addTag(objShow,obj,key,value)
+   });
+    
+    $(document).on('click','#reduce',function(obj){
+    	console.log(obj.target);
+       layer.msg('值:'+$("#tags").val());
+   });
+    
+    
+    $(document).on('click','.tags',function(obj){
+       console.log(obj);
+       //console.log(obj.target.parentElement);
+       console.log(obj.target.parentNode);//标准
+       
+       removeTag(obj.target);
+       //console.log(obj2);
+       //layer.msg('.tags1:'+obj.currentTarget.id);
+       //layer.msg('.tags id:'+obj.target.id);
+       // console.log(obj.target.attributes["value"]);
+     // layer.msg('.tags value:'+obj.target.attributes["value"].value);
+       
+     
+       //layer.msg('.tags:'+obj.target.value);
+   });
+    
+});
+
+
+</script>
+</html>

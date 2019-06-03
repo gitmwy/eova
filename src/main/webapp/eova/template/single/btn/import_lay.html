@@ -1,0 +1,40 @@
+<button class="layui-btn layui-btn-sm ${ZN2Pinyin(button.name!)}${object.code}" title="${button.name}">
+	    <i class="layui-icon">${strutil.out(button.icon!,'&#xe681;')}</i>
+</button>
+<script type="text/javascript">
+$(function () {
+
+
+	
+	
+	$(".${ZN2Pinyin(button.name!)}${object.code}").click(function(){
+
+		//程序会解析此字段
+		var url = '/single_grid/importXls/${menu.code}?template=lay';
+		
+    	var index = layui.layer.open({
+        title : "${button.name}${object.name}",
+        type : 2,
+        content : url,
+        success : function(layero, index){
+            var body = layui.layer.getChildFrame('body', index);
+           
+            setTimeout(function(){
+                layui.layer.tips('点击此处返回${object.name}列表', '.layui-layer-setwin .layui-layer-close', {
+                    tips: 3
+                });
+            },500)
+        }
+	    });
+    	
+	    layui.layer.full(index);
+	    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+	    $(window).on("resize",function(){
+	        layui.layer.full(index);
+	    })
+		
+	})
+	
+
+});
+</script>

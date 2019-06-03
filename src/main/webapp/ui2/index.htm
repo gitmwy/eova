@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta content="text/html;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta http-equiv ="Pragma" content = "no-cache"/>
+	<meta http-equiv="Cache-Control" content="no cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="format-detection" content="telephone=no"/>
+<!-- 	<script src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script> -->
+<!-- 	<link href="https://cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="../../plugins/layui/css/layui.css" media="all"/> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="../../css/fs.css" media="all"/> -->
+<!-- 	<script type="text/javascript" src="../../plugins/jquery/jquery.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="../../plugins/layui/layui.js"></script> -->
+	<script type="text/javascript" src="/plugins/echarts/echarts.min.js"></script>
+	
+	
+<link rel="stylesheet" href="/ui2/src/css/layui.css" media="all" />
+<link rel="stylesheet" href="/ui2/css/public.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/ui/eova/css/eova.css">
+<script type="text/javascript" src="/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/js/json2-min.js"></script>
+<script type="text/javascript" src="/ui/js/common.js"></script>
+<script type="text/javascript" src="/ui/js/string.js"></script>
+<script type="text/javascript" src="/ui2/src/layui.js"></script>
+<script type="text/javascript" src="/plugins/easyui/jquery.easyui.min.js"></script>
+</head>
+<body class="childrenBody">
+
+	<div class="layui-row layui-col-space10">
+		<div class="layui-col-md12">
+			<blockquote class="layui-elem-quote">
+				<span style="color: #FF5722;">积木</span>是一个基于layui+jfinal的快速开发平台，内置11种控件，2种视图模式组件（单表，父子表）,目标是只开发一次（如果是不存在的控件或者组件）然后利用平台的配置功能完成业务
+				组织，当然如果涉及到复杂的业务可以用可配置的拦截器完成前置or后续的复杂业务，本平台的价值是以 已有的控件、组件组织成我们需要的业务功能，我们的目标是80%-90%功能不要开发，只是简单配置即可。
+				
+			</blockquote>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+			<span style="color: #FF5722;">由于开放了系统管理员权限以体验配置开发功能，可能会出现部分人员调整导致系统登陆不了或者配置demo不见所以系统将在每日凌晨恢复配置数据，如遇登陆不了或者demo查看不了请加群让管理员恢复。</span>
+			<br>
+			<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=54022a26ee29e2ed58ab95091a63918e399897ae5cf749526c8ac4191672ca76"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="积木" title="积木"></a>
+			</blockquote>
+			
+			
+			
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				<p>感兴趣的可以关注一下，最好先清理缓存在访问。
+				</p>
+				<a href="https://gitee.com/RemoteControl/BB" target="-bark"><span class="layui-badge">码云下载</span></a>
+				<a href="#"  class="doc"><span class="layui-badge layui-bg-red">文档地址</span></a>
+				<a href="https://v.youku.com/v_show/id_XMzc0Njk3MjEyMA==.html?spm=a2h0j.11185381.listitem_page1.5~A" target="-bark"><span class="layui-badge layui-bg-green">快速开发视频（高清）</span></a>
+<!-- 				<button class="layui-btn">一个标准的按钮</button> -->
+				
+				<a href="#"  class="reinit"><span class="layui-badge layui-bg-green">重置系统数据</span></a>
+			</blockquote>
+		</div>
+
+		<div class="layui-col-md6 layui-col-space5">
+			<blockquote class="layui-elem-quote">
+				版本更新记录(数据库的最新版本建议从我的库中备份一个版本，本地sql脚本可能不够新)
+			</blockquote>
+			<div style="height:600px;overflow: auto;">
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.1.1.2</h2>
+									<span class="layui-badge-rim">2019-1-9</span>
+								</div>
+								<ul>
+									<li>1、修复时间字段带默认值会导致的错误（新增界面等），目前时间的默认值新增时候用隐藏或者 屏蔽<br>
+									2、日常比较常用的场景：A用户新增一个通知(类似记录)，B用户审核，通过以后不可修改，未通过A可以再次提交业务过程，demo见：综合业务-》功能演示-》通知(简单审批流程)，过程说明见：代码仓库-》简单审核功能<br>
+									3、添加新功：快速添加 中，之前可以快速生成独立页面（独立按钮，独立页面）以diy修改（一般情况是修改页面不能满足业务需求）
+									，现额外添加“新增编辑Form”，可以添加审核界面（类编辑但是要素不一致）等编辑界面
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+			
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.1.1.1</h2>
+									<span class="layui-badge-rim">2018-12-30</span>
+								</div>
+								<ul>
+									<li>1、文件类型添加 文件名支持，默认xx字段，则文件名字段为xx_name(如果存在xx_name字段的话) 见综合业务=》样例测试：附件字段<br>
+									2、修复bug，下来或者选择框 table列转意的时候，table空数据会查询全部转意数据<br>
+									3、多角色支持，测试用多角色用户： jzhao8/000000，第一角色为主角色<br>
+									4、行列数据权限（目前只调整了grid 列表），见菜单：jzhao8、jzhao6，jzhao7，eova （密码都是：000000） '全国销售数据'菜单只能看本部门数据，以及 利润列对部分角色隐藏<br>
+									5、添加 弹出 树形控件选择器“下拉树2”，支持复选（额。。。因为dtree需要layui2.4.5版本，所以弹出树 方案未能支持，见：http://www.bblocks.cn/ui2/test/demo_dtree2.htm）<br>
+									6、修复bug，按钮地址错误导致整个页面加载失败，现改为弹出提示“xx按钮加载失败”<br>
+									7、列数据配置，系统管理=》对象权限，以及在各个grid 列表中有：“快速角色数据权限”可以配置当前对象的列权限<br>
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.1.1</h2>
+									<span class="layui-badge-rim">2018-11-18</span>
+								</div>
+								<ul>
+									<li>集成用户自有用户表，目前存在系统用户表：eova_user,目前定义为登录表（login_id,login_psw,rid,id）,添加一张用户表：users(业务数据库)
+									1、users添加 UserInfo的Map ，见OSSConfig.mapping
+									2、登录中 OSSController.loginInit 需要把userinfo的信息设置到User中，以供后续session使用
+									3、修改密码，还是直接修改：eova_user中的login_psw
+									4、users创建维护操作（添加元对象，添加菜单），添加拦截器：UserInfoIntercept，让UserInfo表中的相关信息同步到eova_user表（例如：login_id,id,rid）
+									<br>
+									出现提示场景：如添加修改用户，需要有相关提示，如本例中的，添加用户成功提示：“用户的默认密码：000000”
+									在MetaObjectIntercept中 addSucceed 和 updateSucceed，如果有返回信息，将通知前段显示(需要确认才能关闭)
+									demo见 系统管理=》用户管理2
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.1.0</h2>
+									<span class="layui-badge-rim">2018-11-17</span>
+								</div>
+								<ul>
+									<li>完成form表单设计，超管账户（eova）下打开编辑界面即可见"表单设计" 进行表单设置
+									，然后保存即可（暂无二次打开初始功能 自己完善或者自行编辑元对象的拓展配置中相关Form）
+								            已设计的demo见：综合业务=》功能演示=》班级管理
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.3.4</h2>
+									<span class="layui-badge-rim">2018-11-15</span>
+								</div>
+								<ul>
+									<li>项目需要 添加treegrid 视图，demo见：综合业务=》全国销售数据
+								
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.3.3</h2>
+									<span class="layui-badge-rim">2018-11-13</span>
+								</div>
+								<ul>
+									<li>用导入导出实现项目中的功能，感觉到了缺陷：拦截以后需要根据excel原数据，以及处理好的record，加工数据
+									<br/>根本解决create_time,update_time字段值得问题，暴力解决元对象之间添加默认拦截器：com.eova.aop.MetaObjectIntercept 
+									设置根据配置文件中配置的新增时间，修改时间字段，视图的比较复杂所以需要用户自行定义拦截器完善。
+									表单拖拽设计预下周推出。
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.3.2</h2>
+									<span class="layui-badge-rim">2018-10-14</span>
+								</div>
+								<ul>
+									<li>项目需要，实现导入导出excel（导入只实现单表由于视图的导入存在 a left join b 情况 需要判断视图内表是新增还是更新所以暂时未实现），demo见 “功能演示=》班级管理”，现在生成列表查询菜单默认生成“导入” 和“导出”功能
+									<br/>有疑问的地方：纠结导入（新增，更新等）默认值再什么情况下需要系统设置（前段送和系统设置的风险），
+									<br/>后面将着手 增加：手机端效果以及 新增等form视图的可视化编辑
+									<br/>今天项目测试才发现因为使用了jxl好像不支持xlsx ，现把支持的上传文件限制成了.xls，同时优化了excel拦截器：SingleIntercept添加了控制excel的一些参数，以及读取完成excel可以支持拦截器里边二次处理数据 2018-10-21
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.3.1</h2>
+									<span class="layui-badge-rim">2018-9-21</span>
+								</div>
+								<ul>
+									<li>做项目中发现 下拉以及查找框，再新增、修改 和 列表需要查询的范围竟然不一致 demo见:功能演示=》班级管理，详情见 代码仓库 中下的下拉，
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.3</h2>
+									<span class="layui-badge-rim">2018-9-14</span>
+								</div>
+								<ul>
+									<li>添加控件组织机构视图，以及下拉树控件
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.9</h2>
+									<span class="layui-badge-rim">2018-9-6</span>
+								</div>
+								<ul>
+									<li>添加流式图片列表加载，demo见 功能演示=》图库5
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.8</h2>
+									<span class="layui-badge-rim">2018-9-4</span>
+								</div>
+								<ul>
+									<li>1、增加页面生成（add，update，detail）以及生成的时候指定form视图模式，同时元对象中拓展配置中关于 视图的配置发生变化见代码仓库
+							            2、增加元对象属性“安全模式”，默认不安全	说明见代码仓库
+							            3、很久调整的功能，逻辑删除（目前在运行的还是物理删除）
+							       
+									（数据库结构发生一点调整）
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.7</h2>
+									<span class="layui-badge-rim">2018-8-14</span>
+								</div>
+								<ul>
+									<li>增加文本编辑框控件，使用 Ueditor的简版UMeditor（项目需要~_~）
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.6</h2>
+									<span class="layui-badge-rim">2018-8-12</span>
+								</div>
+								<ul>
+									<li>周末无聊增加7牛云存储 demain.config ,oss_static=0 本地存储， oss_static=1则启用7牛，如果还需要其他则可以自己实现
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.5</h2>
+									<span class="layui-badge-rim">2018-8-9</span>
+								</div>
+								<ul>
+									<li>新增视图支持，demo见“标书管理”，“多表用户信息”，以及省市区联动支持demo见“样例测试”，具体使用说明见“代码仓库”
+									（下一阶段会把demo再整理一遍，然后就去做项目了暂时积木就更新到此）
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.4</h2>
+									<span class="layui-badge-rim">2018-8-5</span>
+								</div>
+								<ul>
+									<li>完成了form表单、query条件排版支持，具体使用说明见“代码仓库”-格式化。demo见“样例测试”
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+						
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.3</h2>
+									<span class="layui-badge-rim">2018-8-1</span>
+								</div>
+								<ul>
+									<li>完成一个视图的配置demo（标书管理），完成元数据管理 字段顺序通过拖拽完成（jquery水平一般还有点小bug不过可以移动调整顺序了~_~），下一步工作主要是 视图的操作完善以及新增编辑界面优化
+									注意：sql库脚本建议从我测试库备份出来，目前没时间完成sql脚本的完善。
+									</li>
+								</ul>
+							</div></li>
+
+					</ul>
+			
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.2</h2>
+									<span class="layui-badge-rim">2018-7-31</span>
+								</div>
+								<ul>
+									<li>完成tab跳转，以及数据校验（具体支持见平台维护-代码仓库），自己添加校验规则见 /ui2/src/lay/modules/form.js</li>
+								</ul>
+							</div></li>
+
+					</ul>
+			
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2.1</h2>
+									<span class="layui-badge-rim">2018-7-23</span>
+								</div>
+								<ul>
+									<li>完成查询框优化，支持配置是否折叠查询条件父子结构默认不显示查询条件(查询条件的排序以及换行等优化有空再弄)，优化layui版本调整成2.3导致整体布局变形BUG</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.2</h2>
+									<span class="layui-badge-rim">2018-7-21</span>
+								</div>
+								<ul>
+									<li>完成除了平台维护模块的全部的layui转换，下阶段美化下界面布局以及bug</li>
+								</ul>
+							</div></li>
+
+					</ul>
+					
+					<ul class="layui-timeline">
+						<li class="layui-timeline-item"><i
+							class="layui-icon layui-timeline-axis"></i>
+							<div class="layui-timeline-content layui-text">
+								<div class="layui-timeline-title">
+									<h2>1.0.1</h2>
+									<span class="layui-badge-rim">2018-7-12</span>
+								</div>
+								<ul>
+									<li>完成初始版本，以供大家体验,使用文档正在补充中</li>
+								</ul>
+							</div></li>
+
+					</ul>
+			</div>
+		</div>
+		<div class="layui-col-md6 layui-col-space5">
+			<blockquote class="layui-elem-quote">	  
+			demo列表  
+				</blockquote>         
+
+			<table class="layui-table">
+    <colgroup>
+      <col width="150">
+      <col width="150">
+      <col width="200">
+  <col width="150">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>地址</th>
+        <th>账户</th>
+     <th>添加时间</th>
+      </tr> 
+    </thead>
+    <tbody>
+      <tr>
+        <td><a target="_blank" href="http://www.bblocks.cn:8081/"><span class="layui-badge">某学校用简单oa</span></td>
+        <td>http://www.bblocks.cn:8081/</td>
+        <td>xz/000000</td>
+        <td>2018-09-29</td>
+      </tr>
+   
+    </tbody>
+  </table>
+
+		
+			
+			<blockquote class="layui-elem-quote">
+				图表
+			</blockquote>
+			<div id="main" style="width: 100%;height:400px;"></div>
+			
+			
+			
+			
+	</div>
+</div>
+
+
+<script>
+layui.use(['layer'],function(){
+	 var layer = layui.layer;
+	
+	$(".doc").on("click",function(){
+		layer.msg('文档正在补充中。。。'); 
+	});
+	
+	$(".reinit").on("click",function(){
+		//layer.msg('准备重置系统数据'); 
+		
+
+		
+		
+		layer.prompt({
+			  title: '请输入初始密码',
+		},function(value, index, elem){
+			  
+			//alert(value); //得到value
+			//执行ajax
+			var url = '/doInitSys?password='+value;
+			
+			 $.get(url, function(result){
+				 	layer.msg(result); 
+				  });
+			
+		
+			  
+			  layer.close(index);
+			});
+	});
+	
+	$('.layui-btn').on("click",function(){
+		//layer.msg('文档正在补充中2。。。'); 
+		parent.addTabManual('hahaname','&#xe677;','http://www.baidu.com/')
+	});
+	 // 基于准备好的dom，初始化echarts实例
+ var myChart = echarts.init(document.getElementById('main'));
+
+ // 指定图表的配置项和数据
+ var option = {
+   title: {
+       text: '折线图堆叠'
+   },
+   tooltip: {
+       trigger: 'axis'
+   },
+   legend: {
+       data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+   },
+   grid: {
+       left: '3%',
+       right: '4%',
+       bottom: '3%',
+       containLabel: true
+   },
+   toolbox: {
+       feature: {
+           saveAsImage: {}
+       }
+   },
+   xAxis: {
+       type: 'category',
+       boundaryGap: false,
+       data: ['周一','周二','周三','周四','周五','周六','周日']
+   },
+   yAxis: {
+       type: 'value'
+   },
+   series: [
+       {
+           name:'邮件营销',
+           type:'line',
+           stack: '总量',
+           data:[120, 132, 101, 134, 90, 230, 210]
+       },
+       {
+           name:'联盟广告',
+           type:'line',
+           stack: '总量',
+           data:[220, 182, 191, 234, 290, 330, 310]
+       },
+       {
+           name:'视频广告',
+           type:'line',
+           stack: '总量',
+           data:[150, 232, 201, 154, 190, 330, 410]
+       },
+       {
+           name:'直接访问',
+           type:'line',
+           stack: '总量',
+           data:[320, 332, 301, 334, 390, 330, 320]
+       },
+       {
+           name:'搜索引擎',
+           type:'line',
+           stack: '总量',
+           data:[820, 932, 901, 934, 1290, 1330, 1320]
+       }
+   ]
+ };
+
+
+ // 使用刚指定的配置项和数据显示图表。
+ myChart.setOption(option);
+	
+});
+</script>
+</body>
+</html>

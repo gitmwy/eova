@@ -1,0 +1,674 @@
+<%layout("/eova/layout/default_lay.html",{'title' : object.name! + '表单设计'}){%>
+<link href="/eova/widget/form/formDesign/css/bootstrap-combined.min.css"
+	rel="stylesheet">
+<link href="/eova/widget/form/formDesign/css/layoutit.css" rel="stylesheet">
+<link href="/eova/widget/form/formDesign/css/docs.min.css" rel="stylesheet">
+<link rel="stylesheet"
+	href="/eova/widget/form/formDesign/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/eova/widget/form/formDesign/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet"
+	href="/eova/widget/form/formDesign/fileinput/css/fileinput.min.css">
+
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="/eova/widget/form/formDesign/js/common.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/fileinput/js/fileinput.min.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/jquery-ui.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/jquery.htmlClean.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/ckeditor/ckeditor.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/ckeditor/config.js"></script>
+<script src="/eova/widget/form/formDesign/js/common.js"></script>
+<script type="text/javascript" src="/eova/widget/form/formDesign/js/scripts.js"></script>
+<script type="text/javascript"
+	src="/eova/widget/form/formDesign/js/FileSaver.js"></script>
+<script type="text/javascript" src="/eova/widget/form/formDesign/js/blob.js"></script>
+<script type="text/javascript" src="/eova/widget/form/formDesign/js/myjs.js"></script>
+<script type="text/javascript" src="/eova/widget/form/formDesign/js/docs.min.js"></script>
+
+<script type="text/javascript">
+var objField=new Object();
+<%
+for(f in object.fields){ 
+	%>
+	
+	$.ajax({
+		url:"/form/designField/${object.code}-${f.en}",
+		method:"get",
+		success:function(response){
+			 objField['${f.en}'] = response;
+		}
+	});
+	
+	
+	<% } %>
+var OBJ_CODE = '${object.code}';
+</script>
+
+<body style="min-height: 660px; cursor: auto; background: url(formDesign/img/builderBg.png) repeat" class="edit">
+
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<div class="nav-collapse collapse">
+					<ul class="nav" id="menu-layoutit">
+						<!-- <li class="divider-vertical"></li> -->
+						<li>
+							<div class="btn-group">
+								<button onclick="resizeCanvas('lg')" class="btn btn-primary">
+									<i class="fa fa-desktop"></i>
+								</button>
+								<button onclick="resizeCanvas('md')" class="btn btn-primary">
+									<i class="fa fa-laptop"></i>
+								</button>
+								<button onclick="resizeCanvas('sm')" class="btn btn-primary">
+									<i class="fa fa-tablet"></i>
+								</button>
+								<button onclick="resizeCanvas('xs')" class="btn btn-primary">
+									<i class="fa fa-mobile-phone"></i>
+								</button>
+							</div>
+							<div class="btn-group" data-toggle="buttons-radio">
+								<button type="button" id="edit" class="btn btn-primary active">
+									<i class="icon-edit icon-white"></i>编辑
+								</button>
+								<button type="button" class="btn btn-primary" id="sourcepreview">
+									<i class="icon-eye-open icon-white"></i>预览
+								</button>
+								
+								
+							</div>
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary"
+									data-target="#downloadModal" 
+									role="button" data-toggle="modal">
+									<i class="icon-chevron-down icon-white"></i>生成
+								</button>
+								<!-- <button type="button" class="btn btn-primary"
+									data-target="#downloadModalOld" rel="/build/downloadModal"
+									role="button" data-toggle="modal">
+									<i class="icon-chevron-down icon-white"></i>生成(老版)
+								</button> -->
+								<button class="btn btn-primary" href="#clear" id="clear">
+									<i class="icon-trash icon-white"></i>清空
+								</button>
+								
+								<button type="button" class="btn btn-success" title="操作说明"  
+										data-container="body" data-toggle="popover" data-placement="bottom"
+										data-html="true" 
+										data-content="1、上部是正常字段，下部是隐藏字段<br> 
+										2、正常字段前必须有分组 <br>
+										3、上部正常字段一个格子只能放一个字段<br>
+										4、下部隐藏字段，可以拉一个单列，然隐藏字段全部丢进去<br>
+										5、本处设置的只读可见等属性为最终属性（元数据字段中设置将无效）">
+									说明
+								</button>
+							</div>
+							
+							<div class="btn-group">
+							<div class="checkbox">
+								<label><input type="checkbox" id="attributeShow" name="attributeShow" checked>默认显示属性</label>
+							</div>
+							</div>
+							
+							
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<form id="designForm" name="designForm" method="post"  class="layui-form">	
+	<div class="container-fluid">
+		<div class="changeDimension">
+			<div class="row-fluid">
+				<div class="">
+					<div class="sidebar-nav">
+						<ul class="nav nav-list accordion-group">
+							<li class="nav-header">
+								<div class="pull-right popover-info">
+									<i class="icon-question-sign "></i>
+									<div class="popover fade right">
+										<div class="arrow"></div>
+										<h3 class="popover-title">帮助</h3>
+										<div class="popover-content">在这里选择布局格式</div>
+									</div>
+								</div> <i class="icon-plus icon-white"></i>
+								布局系统
+							</li>
+							<li style="display: list-item;" class="rows" id="estRows">
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										<input value="单列" type="text" disabled/>
+									</div>
+									<div class="view">
+										<div class="row-fluid clearfix">
+											<div class="span12 column"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										<input value="双列" type="text" disabled/>
+									</div>
+									<div class="view">
+										<div class="row-fluid clearfix">
+											<div class="span6 column"></div>
+											<div class="span6 column"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										<input value="三列" type="text" disabled/>
+									</div>
+									<div class="view">
+										<div class="row-fluid clearfix">
+											<div class="span4 column"></div>
+											<div class="span4 column"></div>
+											<div class="span4 column"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										<input value="四列" type="text" disabled/>
+									</div>
+									<div class="view">
+										<div class="row-fluid clearfix">
+											<div class="span3 column"></div>
+											<div class="span3 column"></div>
+											<div class="span3 column"></div>
+											<div class="span3 column"></div>
+										</div>
+									</div>
+								</div>
+								
+								<!-- 模板 -->
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										<input value="2 4 6" type="text"/>
+									</div>
+									<div class="view">
+										<div class="row-fluid clearfix">
+											<div class="span2 column"></div>
+											<div class="span4 column"></div>
+											<div class="span6 column"></div>
+										</div>
+									</div>
+								</div>
+								
+								
+								<!-- 分割线 -->
+								<div class="lyrow ui-draggable">
+									<a href="#close" class="remove label label-important"><i
+										class="icon-remove icon-white"></i>删除</a> 
+									<span class="drag label"><i class="icon-move"></i>拖动</span>
+									<div class="preview">
+										分割线(分组)
+									</div>
+									<div class="view">
+										
+											<h5 class="page-header" on contenteditable="true">请输入分组名</h5>
+										
+									</div>
+								</div>
+							</li>
+						</ul>
+						<ul class="nav nav-list accordion-group">
+							<li class="nav-header"><i class="icon-plus icon-white"></i>
+								表单组件
+								<div class="pull-right popover-info">
+									<i class="icon-question-sign "></i>
+									<div class="popover fade right">
+										<div class="arrow"></div>
+										<h3 class="popover-title">帮助</h3>
+										<div class="popover-content">
+											这里提供了一系列表单常用组件，你可以通过区块右上角的编辑按钮修改组件属性。</div>
+									</div>
+								</div>
+							</li>
+							
+							
+							<li style="display: none;" class="boxes" id="elmBase">
+								<!-- 单行文本框
+								<div class="box box-element ui-draggable">
+									<a href="#close" class="remove label label-important">
+										<i class="icon-remove icon-white"></i>删除
+									</a> 
+									<span class="drag label">
+										<i class="icon-move"></i>拖动
+									</span> 
+									<span class="configuration">
+										<button type="button" class="btn btn-mini edit-attr" title="edit-text" onclick="showAttribute(this);"
+												role="button" data-toggle="modal">编辑
+										</button>  
+									</span>
+									<div class="preview">单行文本框</div>
+									<div class="view">
+										<div class="form-group">
+											<div class="labelDiv" col="1">
+												<label>text</label>
+											</div>
+											<div class="subDiv" >
+												<input type="text" />
+											</div>
+										</div>
+									</div>
+								</div> 
+								-->
+								<%
+								var fields =object.fields; 
+		
+						
+								
+								for(f in fields){
+								//@f.set("abc");
+								//一些参数可能已经配置过，需要读取出来
+								%>
+		
+		
+								
+								<!-- ${f.type!} -->
+								<div class="box box-element ui-draggable" id="box_${f.en!}">
+									<a href="#close" class="remove label label-important" name="close_${f.en!}">
+										<i class="icon-remove icon-white"></i>删除
+									</a> 
+									<span class="drag label">
+										<i class="icon-move"></i>拖动
+									</span> 
+									<span class="configuration">
+										<button type="button" class="btn btn-mini edit-attr" title="edit-number" onclick="showAttribute(this,'${f.en!}');"
+												role="button" data-toggle="modal">编辑
+										</button>  
+									</span>
+									<div class="preview">${f.cn!}[${f.en!}]</div>
+									<div class="view" id="view_${f.en!}">
+										<div class="form-group">
+											<label class="layui-form-label" title="${f.cn!}[${f.en!}]">${f.cn!}</label>
+											<div class="layui-input-block"  >	
+													 
+<!-- 												<input type="text" id="${f.en!}" name="${f.en!}" value="" placeholder=""  lay-verify="length[2~5]" autocomplete="off" class="layui-input">	 -->
+								   			</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<% } %>	
+								
+								
+								
+							</li>
+							
+							
+							
+						</ul>
+						<!-- 文本组件 -->
+						<ul class="nav nav-list accordion-group">
+							<li class="nav-header"><i class="icon-plus icon-white"></i>
+								文本组件
+								<div class="pull-right popover-info">
+									<i class="icon-question-sign "></i>
+									<div class="popover fade right">
+										<div class="arrow"></div>
+										<h3 class="popover-title">帮助</h3>
+										<div class="popover-content">
+											这里提供了一系列文本组件，你可以通过区块右上角的编辑按钮修改组件属性。</div>
+									</div>
+								</div>
+							</li>
+							<li style="display: none;" class="boxes" id="elmBase">
+								<div class="box box-element ui-draggable">
+									<a href="#close" class="remove label label-important">
+										<i class="icon-remove icon-white"></i>删除
+									</a> 
+									<span class="drag label">
+										<i class="icon-move"></i>拖动
+									</span> 
+									<span class="configuration">
+										<button type="button" class="btn btn-mini edit-attr" title="edit-date" data-target="#editorModal"
+												role="button" data-toggle="modal">编辑
+										</button>  
+									</span>
+									<div class="preview">文本块</div>
+									<div class="view">
+										<h5 contenteditable="true">标题</h5>
+										<p contenteditable="true">这里是一个段落，可以直接编辑也可以通过点击编辑按钮去富文本编辑器编辑文本</p>
+										
+										<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+										  <legend>默认面包屑</legend>
+										</fieldset>
+									</div>
+								</div>
+
+								<div class="box box-element ui-draggable">
+									<a href="#close" class="remove label label-important">
+										<i class="icon-remove icon-white"></i>删除
+									</a> 
+									<span class="drag label">
+										<i class="icon-move"></i>拖动
+									</span> 
+									<span class="configuration">
+										<button type="button" class="btn btn-mini edit-attr" title="edit-date" onclick="showEditorModal(this);"
+												role="button" data-toggle="modal">编辑
+										</button>  
+									</span>
+									<div class="preview">富文本编辑框</div>
+									<div class="view">
+										<div class="form-group">
+											<div class="labelDiv" col="1">
+												<label>editor</label>
+											</div>
+											<div class="subDiv">
+												<textarea class="editor_textarea">  
+												  把编辑器的初始内容放在这textarea即可
+												</textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="demo ui-sortable normalf" style="min-height: 300px;" title="正常字段朝我射击">
+				
+				</div>
+				<hr class="layui-bg-red">
+				<div class="demo ui-sortable hiddenf" style="min-height: 200px;" title="隐藏字段朝我射击">
+					
+				</div>
+				<div id="download-layout">
+					<div class="container-fluid"></div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="modal hide fade" role="dialog" id="editorModal">
+			<div class="modal-body">
+				<p>
+					<textarea id="contenteditor"></textarea>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<a id="savecontent" class="btn btn-primary" data-dismiss="modal">保存</a>
+				<a class="btn btn-primary" data-dismiss="modal">取消</a>
+			</div>
+		</div>
+
+		<!-- 设置单行文本框的属性 -->
+		<div class="modal hide fade" role="dialog" id="attributes">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>控件属性</h3>
+			</div>
+			<div class="modal-body">
+				<div id="warn" class="hide alert alert-warning">
+    				<strong>警告！</strong>必须填写组件ID。
+				</div>
+
+				
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">
+							标签占列宽
+							<div class="pull-right popover-info">
+								<i class="icon-question-sign "></i>
+								<div class="popover fade right">
+									<div class="arrow"></div>
+									<h3 class="popover-title">帮助（暂时无用）</h3>
+									<div class="popover-content">
+										请填写标签占列宽(1~12的整数)</div>
+								</div>
+							</div>
+						</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control col" id="label_width"
+								placeholder="请输入标签占列宽" readonly>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">
+							组件占列宽
+							<div class="pull-right popover-info">
+								<i class="icon-question-sign "></i>
+								<div class="popover fade right">
+									<div class="arrow"></div>
+									<h3 class="popover-title">帮助（暂时无用）</h3>
+									<div class="popover-content">
+										请填写组件占列宽(1~12的整数)</div>
+								</div>
+							</div>
+						</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control col" id="obj_width"
+								placeholder="请输入组件占列宽" readonly>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">标签</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="label_name"
+								value="" placeholder="请输入组件标签">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">说明</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="label_explain"
+								value="text" placeholder="请输入组件标签">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">
+							ID<span style="color:red;float:left;">*</span>
+						</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="obj_id"
+								placeholder="请输入组件ID" readonly>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-4 col-xs-7">
+							<div class="checkbox">
+								<label> <input type="checkbox" lay-ignore id="obj_must">必须
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-4 col-xs-7">
+							<div class="checkbox">
+								<label> <input type="checkbox" lay-ignore id="obj_readonly">只读
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">校验规则</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="obj_layVerify"
+								placeholder="请输入组件校验规则">
+						</div>
+					</div>
+					
+					
+					
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">默认值</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="obj_defaultValue"
+								placeholder="请输入组件默认值">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-xs-2 col-sm-offset-2 control-label">提示值</label>
+						<div class="col-xs-7">
+							<input type="text" class="form-control" id="obj_placeholder"
+								placeholder="请输入组件输入提示">
+						</div>
+					</div>
+					
+					<!-- 特色组件其他值，比如下拉组件的数据源等 -->
+					
+				
+			</div>
+			<div class="modal-footer">
+				<a id="save-content" class="btn btn-primary">保存</a>
+				<a class="btn btn-primary" data-dismiss="modal">取消</a>
+			</div>
+		</div>
+</form>		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<!-- 文件上传模态框 -->
+		<div class="modal fade" id="myModal" style="display:none;" role="dialog"
+			aria-labelledby="myModalLabel">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">请选择或者拖拽要上传的文件</h4>
+					</div>
+					<div class="modal-body">
+						<input type="file" name="file" id="txt_file" multiple />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal hide fade" role="dialog" id="downloadModal">
+		
+			<div id="warn2" class="hide alert alert-warning">
+    				<strong>警告！</strong>无分组信息。
+				</div>
+				
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>查看</h3>
+			</div>
+			<div class="modal-body">
+				<input type="text" class="form-control" id="formName" name="formName" value="${formType!}" placeholder="请输入表单名(xxForm)">
+			</div>
+			<div class="modal-body">
+				<p>
+					<textarea></textarea>
+				</p>
+			</div>
+			<div class="modal-footer">
+<!-- 				<a class="btn btn-primary" data-dismiss="modal" onclick="javascript:saveJson();">保存(老)</a> -->
+				<a class="btn btn-primary" data-dismiss="modal" onclick="javascript:saveJson();">保存</a>
+			</div>
+		</div>
+	</div>
+	
+</form>
+	<script>
+		function resizeCanvas(size) {
+
+			var containerID = document
+					.getElementsByClassName("changeDimension");
+			var containerDownload = document.getElementById("download-layout")
+					.getElementsByClassName("container-fluid")[0];
+			var row = document.getElementsByClassName("demo ui-sortable");
+			var container1 = document.getElementsByClassName("container1");
+			if (size == "md") {
+				$(containerID).width('id', "MD");
+				$(row).attr('id', "MD");
+				$(container1).attr('id', "MD");
+				$(containerDownload).attr('id', "MD");
+			}
+			if (size == "lg") {
+				$(containerID).attr('id', "LG");
+				$(row).attr('id', "LG");
+				$(container1).attr('id', "LG");
+				$(containerDownload).attr('id', "LG");
+			}
+			if (size == "sm") {
+				$(containerID).attr('id', "SM");
+				$(row).attr('id', "SM");
+				$(container1).attr('id', "SM");
+				$(containerDownload).attr('id', "SM");
+			}
+			if (size == "xs") {
+				$(containerID).attr('id', "XS");
+				$(row).attr('id', "XS");
+				$(container1).attr('id', "XS");
+				$(containerDownload).attr('id', "XS");
+			}
+		}
+		
+		 //点击按钮,修改div的宽高和背景颜色
+	   // $(".page-header").onclick = function () {
+	    //    my$("dv").style.width = "300px";
+	   //     my$("dv").style.height = "300px";
+	   //     my$("dv").style.backgroundColor = "deeppink";
+	   // };
+	    
+	
+$('#downloadModal').on('hide.bs.modal', function () {
+	  // 执行一些动作...
+	
+	$("div.modal-backdrop").remove();
+	
+
+	
+	//$('#warn2').modal('hide');
+	});    
+
+	</script>
+
+</body>	
+
+
+
+<%}%>

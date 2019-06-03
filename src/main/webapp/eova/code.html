@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>EOVA简单开发 - 常用代码块</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="renderer" content="webkit">
+<link type="text/css" rel="stylesheet" href="/ui/css/code.css"/>
+<script src="/ui/js/jquery.min.js" type="text/javascript"></script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+
+<div class="tab">
+
+<div class="tab_menu">
+	<ul>
+		<li class="selected">EOVA控件/组件</li>
+		<li>格式化</li>
+		<li>下拉&查找表达式</li>
+		<li>UI校验</li>
+		<li>前端代码</li>
+		<li>视图支持</li>
+		<li>更新模式支持</li>
+		<li>数据删除</li>
+		
+		<li>生成页面</li>
+		
+		<li>组织（类似树）</li>
+		<li>导入导出</li>
+		<li>简单审核功能</li>
+	</ul>
+</div>
+<div class="tab_box">
+
+<!-- tab0 -->
+<div>
+
+<pre>
+公共属性：
+id=唯一标识，必填
+name=表单名称，必填
+value=表单值
+isNoN=是否不为空
+disable=是否只读
+
+下拉框&查找框 特有属性：
+code=元对象编码，必填
+field=元字段名称，必填
+multiple是否多选
+
+文本框框&文本域 特有属性：
+placeholder=框内友好提示信息
+
+文本域&编辑框&JSON框 特有属性：
+style=自定义CSS
+
+图片框&文件框 特有属性：
+filedir=自定义上传目录，必填
+
+其它：
+options=自定义高级属性，详情参见源码！
+
+提示：
+抖动提示（错误）：
+layer.msg('不开心。。', {icon: 5}, {anim:6});
+
+提示：
+layer.msg('不开心。。', {icon: 5});
+layer.msg('不开心。。');
+
+提示（需要确定的）
+layer.alert(result.msg, {icon: 2});
+
+提示需要确定以后执行刷新
+layer.alert('设置成功.', {icon: 5,yes: function(index, layero){
+			    //do something
+			   
+			    reload();
+			  },
+			  cancel: function(index, layero){ 
+				  reload();
+				  
+				} });
+
+</pre>
+<hr/>
+支持控件，可以继续增加
+<hr/>
+<pre>
+
+// 文本框
+&lt;#text_lay id="txtInfo" name="info" value="一句话构建文本框" placeholder="请输入信息..." isNoN="" validator="" options="" disable="" />
+// 下拉框
+&lt;#combo_lay id="item.en" name="name"  code="item.object_code" field="item.en" value="value!" placeholder="placeholder!item.placeholder!" isNoN="item.is_required!" multiple="item.is_multiple" isReadonly="readnoly!false" />
+// 查找框
+&lt;#find_lay id="item.en" name="name"  code="item.object_code" field="item.en" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!" multiple="item.is_multiple" isReadonly="readnoly!false" />
+// 时间框
+&lt;#time_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" isReadonly="readnoly!false" placeholder="placeholder!item.placeholder!" options="yyyy-MM-dd HH:mm:ss" />
+// 日期框
+&lt;#time_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" isReadonly="readnoly!false" placeholder="placeholder!item.placeholder!" options="yyyy-MM-dd"/>
+// 文本域
+&lt;#texts_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!" validator="item.validator!" style="width=width};height:item.height!20px;" isReadonly="readnoly!false" />
+// 编辑框
+&lt;#edit_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!" style="width=width;height:item.height!250px;" isReadonly="readnoly!false" />
+// 布尔框
+&lt;#bool_lay id="item.en" name="name" value="value!" options="" placeholder="placeholder!item.placeholder!" isReadonly="readnoly!false" />
+// 图片框
+&lt;#img_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!" filedir="item.config.filedir!" isReadonly="readnoly!false" />
+// 文件框
+&lt;#file_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!"  filedir="item.config.filedir!" isReadonly="readnoly!false" />
+文件框 支持文件名保存，默认存入xx_name字段(xx为文件自动，如果xx_name存在则文件名存入xx_name),表、元对象添加xx_name字段，并且都设置禁用即可
+// 图标框
+&lt;#icon_lay id="item.en" name="name" value="value!" isNoN="item.is_required!" placeholder="placeholder!item.placeholder!" isReadonly="readnoly!false" />
+// JSON框(目前未实现)
+&lt;#json id="" name="" value="" isNoN="" style="margin-top: 3px;width:99.9%;height:200px;" disable="" />
+//查询时间段
+&lt;#times_lay id="f.en" name="f.en" start_placeholder="f.cn}开始时间" end_placeholder="f.cn}结束时间"  />
+//查询数字段
+&lt;#num_lay id="f.en" name="f.en" start_placeholder="f.cn}大与等于" end_placeholder="f.cn}小于" />
+</pre>
+<hr/>
+组件
+<hr/>
+<pre>
+
+objectCode=元对象编码(给我一个对象编码，我就能给你一个宇宙)
+toolbar=绑定工具栏ID
+menuCode=当前菜单编码(会自动获取当前菜单的相关限制，比如过滤条件等)
+
+// 表格 
+&lt;#grid_lay id="" objectCode="" toolbar="" menuCode="" />
+// 树表（暂不支持）
+&lt;#treegrid id="" objectCode="" toolbar="" menuCode="" treeField="以树方式展现的字段" />
+// 树（暂不支持）
+&lt;#tree id="" objectCode="" menuCode=""  idKey="" nameKey="" pidKey="" iconKey="" rootPid="" expandAll="true" />(故名思意，自解！)
+
+</pre>
+
+</div>
+<!-- tab0 -->
+
+<!-- tab1 -->
+<div class="hide">
+<hr/>
+格式化-红色加粗
+<hr/>
+<pre>
+function(value, row, index, keyName) {
+    if (value) {
+        return '&lt;b style="color: red">' + value + '&lt;/b>';
+    }
+    return value;
+}
+</pre>
+
+<hr/>
+格式化-图片
+<hr/>
+<pre>
+function(value, row, index, keyName) {
+    if (value) {
+        return '&lt;img src="http://图片域名/图片目录/' + value + '" height=25>'
+    }
+    return value
+}
+</pre>
+
+<hr/>
+格式化-链接
+<hr/>
+<pre>
+function(value, row, index, keyName) {
+    return '&lt;a target="_blank" href="http://eova.cn" style="color:blue">' + value + '</a>'
+}
+</pre>
+
+<hr/>
+格式化-新开关联页面 to 浏览器Tab
+<hr/>
+<pre>
+function(value, row, index, keyName) {
+    return '&lt;a target="_blank" href="/single_grid/list/biz_demo_hotel_stock?query_hotel_id=' + row.id + '" style="color:blue">' + value + '&lt;/a>';
+}
+</pre>
+
+<hr/>
+格式化-新开关联页面 to Tab
+<hr/>
+<pre>
+
+function(value, row, index, keyName) {
+    var url = '/single_grid/list/biz_demo_hotel_stock?template=lay&query_hotel_id=' + row.id;
+    return '&lt;a href="javascript:parent.addTabManual(\'' + row.name + '库存\',\'\',\'' + url + '\');" style="color:blue">' + value + '</a>';
+}
+
+PS:JS是万能的，只有你想不到的，没有你做不到的！大胆猜测，小心验证！
+</pre>
+
+<hr/>
+form格式化
+<hr/>
+<pre>
+元数据管理object中	拓展配置 (json)，如果存在addForm 以及 updateForm，以及 detailFrom 以及 form,则会启用相应的form配置，否则则是最普通的平铺(一行一个顺序输出)，样例见“样例测试”功能，
+为form增加一个参数：force =1 则强制使用配置的方式显示字段（而不用系统配置的是否显示什么的）默认=0，同时老版配置方式也允许存在，新的配置方式见最后（目前在生成页面的时候特别有效，后面新增等按钮将支持指定form视图）
+
+&lt;span style="color: #FF5722;">force的差别：0-只输出view中标记 且能输出的（正常的），最后输出隐藏的，1-输出view中标记,最后输出那些隐藏且未输出过的&lt;/span>
+例如
+{
+  "form": [
+    {
+      "name": "面板1",
+      "order": 1,
+      "datas": [
+        {
+          "line": "1",
+          "data": "name,tag1,tag2"
+        },
+        {
+          "line": "2",
+          "data": "password,relation_pro"
+        }
+      ]
+    },
+    {
+      "name": "面板2",
+      "order": 1,
+      "datas": [
+        {
+          "line": "1",
+          "data": "status"
+        },
+        {
+          "line": "2",
+          "data": "avatar,file"
+        }
+      ]
+    }
+  ],
+  "addForm": [
+    {
+      "name": "面板1",
+      "order": 1,
+      "datas": [
+        {
+          "line": "1",
+          "data": "name(3),password(3)"                     --layui的布局一行最大12格，例如3，则占用一行3/12,推荐的值：3，4，6，12分别为：一行 4个，3个，2个，1个，如果不配置数字则大家平分一行的宽度,支持负数 "name(3),password(-3)" ，表示不输出字段属性，用于类似省市区合并效果
+        },
+        {
+          "line": "2",
+          "data": "status(3)"
+        }
+      ]
+    },
+    {
+      "name": "面板2",
+      "order": 1,
+      "datas": [
+        {
+          "line": "1",
+          "data": "tag1,tag2,relation_pro"
+        },
+        {
+          "line": "2",
+          "data": "avatar,file"
+        }
+      ]
+    }
+  ],
+  "xxForm": {
+  "force":1,                    --是否强制显示
+   "list":[
+	    {
+	      "name": "面板1",
+	      "order": 1,
+	      "datas": [
+	        {
+	          "line": "1",
+	          "data": "name(3),password(3)"                     --layui的布局一行最大12格，例如3，则占用一行3/12,推荐的值：3，4，6，12分别为：一行 4个，3个，2个，1个，如果不配置数字则大家平分一行的宽度
+	        },
+	        {
+	          "line": "2",
+	          "data": "status(3)"
+	        }
+	      ]
+	    },
+	    {
+	      "name": "面板2",
+	      "order": 1,
+	      "datas": [
+	        {
+	          "line": "1",
+	          "data": "tag1,tag2,relation_pro"
+	        },
+	        {
+	          "line": "2",
+	          "data": "avatar,file"
+	        }
+	      ]
+	    }
+	  ]
+  }
+}
+
+PS:务必把需要输出的都配置到json，&lt;span style="color: #FF5722;">否则可能输出会丢失(目前调整为 未分组的数据在最后一组输出 提示用户再次调整)&lt;/span>，隐藏的推荐不用设置布局（字段设置中分组，分组名功能暂时无效）。
+</pre>
+
+
+<hr/>
+form格式化
+<hr/>
+<pre>
+元数据管理object中	拓展配置 (json)，如果存在query,则会启用相应的query配置，否则则是最普通的平铺(一行一个顺序输出)，样例见“样例测试”功能，例如
+{
+					"query": [{
+							"line": "1",
+							"data": "name,tag1,tag2"
+						},
+						{
+							"line": "2",
+							"data": "password(3),relation_pro(3)"            --layui的布局一行最大12格，例如3，则占用一行3/12,推荐的值：3，4，6，12分别为：一行 4个，3个，2个，1个，如果不配置数字则大家平分一行的宽度
+						}
+					]
+				}
+
+PS:务必把需要输出的都配置到json，<span style="color: #FF5722;">否则可能输出会丢失</span>。
+</pre>
+
+
+</div>
+<!-- tab1 -->
+
+<!-- tab2 -->
+<div class="hide">
+
+<hr/>
+查询来自eova库中的字典，构建联动下拉框
+<hr/>
+select value ID,name CN from eova_dict where object = '表名' and field = '字段名';ds=eova
+<br>
+类似省市区关联配置，字段分别为：p_id,c_id,a_id,下面的配置为市级表达式配置，额外增加一个字段 名称为省级节点的ID（p_id），无其他配置即可完成联动
+<br>
+select areaId ID,areaName CN,parentid p_id from area where level=2;ds=eova
+<br>
+<br>
+
+<hr/>
+查询来自main库中的字典，构建下拉框（默认为main库，不用写ds=main）
+<hr/>
+select value ID,name CN from dicts where object = '表名' and field = '字段'
+<br>
+<br>
+
+<hr/>
+查找表达式
+<hr/>
+<pre>
+select id ID,name 酒店名 from hotel
+select id ID,name 酒店名,address 地址 from hotel
+</pre>
+<br>
+
+<hr/>
+查找表达式-逻辑判断SQL条件（Beetl语法）
+<hr/> 
+${exp1!}
+
+<br>
+
+<hr/>
+使用过程中发现数据范围有差别：list列表的转换是全部的数据（包括失效的，别人的），而修改新增需要的是有效、我的数据才可以显示
+<hr/> 
+select id ID,name 酒店名 from hotel where 1=1 [and owner_id=${user.id!}]
+
+产生的结果：list查询的时候会去掉"[]"中的条件，而 新增修改界面会加上此条件
+<br>
+
+<br>
+
+</div>
+<!-- tab2 -->
+
+<!-- tab3 -->
+<div class="hide">
+<pre>
+规则	参数	描述	例子
+目前存在的(layui自带)：
+required 必填（一般不需要配置，只要选中‘是否必填’即可）
+phone 手机号
+email 邮件
+url 地址
+number 数字
+date 时间
+identity 身份证
+
+添加的验证：
+match[name];
+用于验证两个字段的值必须相同
+
+range	必选，范围值	数值范围	
+range[0~99]      //0到99的整数
+range[~99]       //小于或等于99的整数
+range[0~]        //大于或等于0的整数
+length	必选，范围值
+可选，是否计算真实长度	验证字符长度	
+length[6~16]       //6-16个字符
+length[6]          //6个字符
+length[~6]         //小于6个字符
+length[6~]         //大于6个字符
+
+
+remote	必选，url地址
+可选，附带额外的字段	远程验证
+remote[path/to/server.php]
+remote[path/to/server.php, name1, name2, ..]
+
+
+新增条件校验，“{}”中的即为条件：
+xx{status==2}，意为如果字段status值为2 才触发xx条件，具体的例子：required{status==2},status值为2的时候字段才是必填的，支持常规条件：==，!=,>,>=,<,<=
+</pre>
+</div>
+<!-- tab3 -->
+
+<!-- tab4 -->
+<div class="hide">
+<pre>
+// 自动刷新Eova组件(datagrid+treegrid)
+$.widgetReLoad($widget);
+
+// 自动获取组件选中行(datagrid+treegrid)
+$.getWidgetSelected($widget);
+
+附：自己添加校验规则见 /ui2/src/lay/modules/form.js
+</pre>
+</div>
+<!-- tab4 -->
+
+
+
+<!-- tab5 -->
+<div class="hide">
+<pre>
+视图支持：
+首先明确下几种场景：
+1、a left join b 并且只有a或者只有b需要新增或者编辑
+2、a left join b 且a、b都要进行操作
+至于再复杂的视图大家看着办吧~_~，原则也支持大家多测试吧。
+和单表配置类似额外配置如下：
+1、字段 中 字段表名，需要大家补充下（告知系统此字段来源哪个表），后期看下系统是否能自动读取
+2、对象 中 扩展配置，增加如下json，主要是view字段：
+{
+  "view": {
+    "users": {
+      "whereField": "id", --表字段ID
+      "paramField": "id"  --对应的视图中数据来源
+    },
+    "users_exp": {
+      "whereField": "users_id",
+      "paramField": "id"
+    }
+  }
+}
+此处的意思为：表users、表users_exp需要更新并将视图只的值对应表相应字段，即可这么理解需要更新那张表即需要配置此表的主键/外键以及对应的视图值，保存顺序依次为：users，users_exp
+
+PS:目前阶段不建议生成视图字段转义（类似：select a.id as aid,b.name as bname from a left join b on a.id=b.aid），因为系统目前暂时不能识别字段对应表字段是哪个（后期我再优化下）
+且视图的表不支持联合主键
+注意：视图更新有先后
+。
+</pre>
+</div>
+<!-- tab5 -->
+
+
+<!-- tab6 -->
+<div class="hide">
+<pre>
+更新模式支持(目前系统支持1增加1更新，但是我现实的感觉是更新的情况很多常见的是修改数据 审核，审核，审核，但是目前系统对多更新支持的优先，只允许更新设置运行更新的字段，否则忽略，so目前调整如下)：
+1、继续支持更新上设置是否运行更新
+2、元数据可以设置 安全模式，安全模式下只允许修改限定字段，非安全模式运行修改上送的数据
+   场景如下：修改数据（abcd字段），审核(def字段) ，先把修改字段至少允许def字段，然后通过一键生成页面（含abcdef字段，可以页面删除掉abc字段即可），然后再关闭ef字段的修改需求
+   ，即可满足修改页面只修改abcd且只含abcd，审核页面只含def字段
+3、有几种类型字段比较特殊，需要特殊处理
+   a、布尔类型 ：选中送直接值为on,否则直接不送值，未选中情况很难判断是否要更新（非安全模式下不支持）
+   b、时间类型：datetime timestamp ，timestamp则在页面存在字段且为空的情况下会初始这个值，datetime只是真实的负责记录（前段送的值）
+   ，所以关于插入当前时间有2个方案：1、在form界面存在timestamp的字段且值为''即可，系统将会补充当前时间，2、设置此字段为新增或者更新的时候 更新系统值
+   场景一个表存在create_time（创建时间）,update_time（修改时间）,check_time（审核时间） 
+  create_time无问题数据库设置默认值即可，check_time在新形成的页面添加 <input type="hidden" name="check_time" value="" />	即可，主要的问题在于update_time怎在第二次更新的时候系统时间？还是有问题啊
+  c、更新或者新增保存当前用户id，好像也无方案只能写一个更新前过滤器，如果是生成的页面只能设置一个隐藏的用户字段：<input type="hidden" name="user_id" value="${session.user.id}" />	
+  
+  b、c的问题差不多主要问题是在更新的时候此值使用当前值 和 默认值谁优先的问题，有什么方案么？
+
+ps:布尔类型控件被调整，肯定会送值：on/off 2018-09-16 
+
+关于时间字段更新的调整：元对象默认创建拦截器:com.eova.aop.MetaObjectIntercept 将在新增和更新 默认赋值create_time,update_time字段的值
+字段配置（如果是其他字段）：eova.config=>table_create_time 和 table_update_time 
+</pre>
+</div>
+<!-- tab6 -->
+
+<!-- tab7 -->
+<div class="hide">
+<pre>
+目前系统删除数据是物理删除，现在增加逻辑删除 eova.config （表和视图都支持而且是尽量删除，如果表中无此字段则直接物理删除）
+1、配置删除字段 delete_field_name = is_delete
+
+附：如存在delete_field_name ，则尽量删除，否则直接删除
+</pre>
+</div>
+<!-- tab7 -->
+
+<!-- tab8 -->
+<div class="hide">
+<hr/>
+自定义界面_生成新增/修改/详情页面
+<hr/>
+<pre>
+超管用户（eova）下：
+1、点击“快速添加”
+2、三个按钮：“copy添加” “copy编辑” “copy详情” 即为快速形成相关界面，需要要素为：图标，名称（必填），form名字
+3、点击相关按钮，即可完成快速生成页面（页面形成，按钮添加）
+4、新增编辑Form 可以快速形成 类编辑按钮，然后设计编辑form，主要用来做类似审核等的修改界面（界面和修改类似 要素不一致，当前页面的PAGE_TYPE 会标记页面类型）
+5、生成位置，弹出页面会告知，期中相关配置如下：
+domain_config中：
+#默认生成页面根路径（一旦形成建议不要修改，否则需要把已生成文件copy至新位置）,开发环境可以设置成直接覆盖，生产还是不推荐覆盖
+page_default=/pages/
+page_default_over=1
+
+
+附：名字不能重复，即已经存在新增再次添加新增按钮会导致出错，form名字 即为元对象中指定视图（可为空）
+</pre>
+
+<hr/>
+自定义界面_diy生成
+<hr/>
+<pre>
+超管用户（eova）下：
+1、点击“快速添加”
+2、DIY新增，需要要素为：图标，名称（必填），ui路径（必填），bs路径
+3、点击“DIY新增”，即新增了新按钮
+
+
+
+附：ui路径 即认为是按钮（显示内容，以及点击事件），bs路径即权限接口，一般的类似新增，应该是一个按钮html 一个 按钮弹出页面，需要用户开发完成再添加
+</pre>
+
+</div>
+<!-- tab8 -->
+
+
+
+<!-- tab9 -->
+<div class="hide">
+<hr/>
+添加组织视图，以及下拉树控件（简单来说就是让用户维护 组织，以及在输入界面选择组织）
+<hr/>
+<pre>
+超管用户（eova）下：
+做成组织视图的需要要求表要求至少：id，name，pid
+1、完成元对象创建
+2、菜单管理=》业务模板 选择 组织
+ 模板配置需要注意的：组织字段（目前最多支持2个，一个显示组织名，下面显示组织负责人），图标字段暂时不支持（后期完善下，文字模式/大图小字模式）
+3、在组织界面，选择完节点新增下属节点，删除节点只删除当前节点，子以及子子节点还存在在表中（如果要删除请自行完成）demo 见 功能演示=》部门管理/我的部门3
+
+ 
+
+下拉树控件：
+供用户选择组织
+1、和下拉控件类似
+2、填写的表达式有些区别为：select id ID,department NAME,p_id P_ID from t_department where state=1 and customer_id=1 order by p_id
+   主要三个字段：id，name，p_id,不可缺少
+3、demo见 综合业务=》样例测试
+</pre>
+
+
+
+</div>
+<!-- tab9 -->
+
+
+<!-- tab10 -->
+<div class="hide">
+<hr/>
+导入导出
+<hr/>
+<pre>
+导出：
+1、整个对象字段数据导出
+2、限制字段导出啥的暂时未实现也不知道有没有需求
+导入：
+1、单表导入（基本无需配置代码）
+2、单表导入更新基于ID
+3、如果需要实现自有业务，请添加自有拦截器并配置到菜单中（继承自SingleIntercept）
+4、目前只支持.xls格式，xlsx后续添加
+5、关于视图的导入，存在a left join b 情况 需要判断视图内表是新增还是更新所以暂时未实现，后续添加
+
+demo见 功能演示=》班级管理
+
+</pre>
+
+
+
+</div>
+<!-- tab10 -->
+
+
+<!-- tab11 -->
+<div class="hide">
+<hr/>
+通知的简单审批需求
+<hr/>
+<pre>
+1、角色：老师 添加通知，修改通知(未审批过)，查看自己以及审核通过的通知
+2、管理员：审批通知（初始状态），查看全部通知
+
+
+附：
+</pre>
+
+<hr/>
+操作步骤（表t_notice已建）：
+<hr/>
+<pre>
+1、导入元数据(o_notice)
+2、设置字段类型，校验，表达式，默认值，列表显示、快速查询等，见o_notice字段（新增状态、更新状态 暂时不管）
+3、菜单管理，添加菜单名称：通知(简单审批流程)，元对象选择 o_notice,业务模板选：单表，即可查看完成菜单功能，见“通知(简单审批流程)” 
+4、对于 通知有3个表单，一个列表查询 
+   a、已经存在2个表单 新增和修改，还缺一个审核表单，点击“快速添加” 使用“新增编辑Form”(需添加3个要素，名称、FORM名字 和 图标 ，前2个必填)，因为我们是审核所以form名字为：shenheForm
+   点击“新增编辑Form”即完成审核按钮得添加
+   b、列表查询在元数据字段中 设置：列表显示、以及快速查询，然后即可看到查询界面的变化，当然可以调整顺序，至于查询框的排版 见格式化=》form格式化
+   c、新增表单 我们使用默认的顺序表单，元对象的字段中选择新增状态为显示以及只读等属性即可。字段顺序为顺序（如需调整可以调整顺序但是此顺序和列表字段顺序一致 修改会一同影响到查询列表字段顺序）
+   d、修改表单 点击具体数据进入修改界面，有“表单设计”按钮（超管用户才有），即可进入修改表单的设计界面，拖拽布局以及字段进入相应位置，然后点击“生成”=》保存 即可（操作前记得 看下说明） 效果见本模块的修改
+   e、审核表单 同上只是显示要素不一致以及除了审核要素外都是只读，见本模块的审核
+
+5、查询的数据权限：见元对象的过滤条件
+type=1  
+&lt;%if(user.role.id == 8||user.role.id == 9){%>
+ and (create_user=$ {user.id} or status = 1)
+&lt;%}%>
+
+6、最后就要我们写代码了，新增拦截器 NoticeIntercept 集成自MetaObjectIntercept，并 配置入 o_notice 的业务拦截器中(本处未实现)
+主要的业务如：
+addBefore 添加只有老师角色才能发布公告（如果需要这样的话）
+deleteBefore 审核通过的不允许删除
+updateBefore 审核后的不允许修改，只有初始的可以审核 可以通过 参数中的"PAGE_TYPE"判断当前的操作类型(update or shenhe),同时更新审核时间
+
+
+
+附：表单设计目前暂无初始化功能，所以设计好的表单请进入前段查看是否满足需求，即刻调整至满足为止，否则下次再次进入表单设计需要从头来过。
+字段type可以忽略，这个是意味某类型通知。
+操作账户：eova/000000,jzhao8/000000
+</pre>
+
+</div>
+<!-- tab11 -->
+
+</div><!-- tab_box -->
+</div>
+
+<script>
+	$(function() {
+		var $div_li = $("div.tab_menu ul li");
+		$div_li.click(function() {
+			$(this).addClass("selected") //当前<li>元素高亮
+			.siblings().removeClass("selected"); //去掉其它同辈<li>元素的高亮
+			var index = $div_li.index(this); // 获取当前点击的<li>元素 在 全部li元素中的索引。
+			$("div.tab_box > div") //选取子节点。不选取子节点的话，会引起错误。如果里面还有div
+			.eq(index).show() //显示 <li>元素对应的<div>元素
+			.siblings().hide(); //隐藏其它几个同辈的<div>元素
+		}).hover(function() {
+			$(this).addClass("hover");
+		}, function() {
+			$(this).removeClass("hover");
+		})
+	})
+</script>
+</body>
+</html>

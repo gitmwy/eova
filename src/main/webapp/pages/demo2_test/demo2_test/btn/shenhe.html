@@ -1,0 +1,59 @@
+<button class="layui-btn layui-btn-sm shenhe${object.code}" title="审核">
+	    <i class="layui-icon">${button.icon!'&#xe642;'}</i>
+</button>
+<script type="text/javascript">
+
+//编辑
+function shenhe${object.code}(edit,data){
+		var ref = $.getGetParasRef();
+		var extra = '';
+		if(ref != null)
+			extra = '&ref='+ref;
+		
+		var url = '/form/update/${object.code}-' + data[0].pk_id+'?template=lay';url = url+'&menuCode=demo2_test&page=shenhe';
+    	var index = layui.layer.open({
+        title : "审核${object.name}",
+        type : 2,
+        content : url+extra,
+        success : function(layero, index){
+            var body = layui.layer.getChildFrame('body', index);
+            if(edit){
+                body.find(".newsName").val(edit.newsName);
+                body.find(".abstract").val(edit.abstract);
+                body.find(".thumbImg").attr("src",edit.newsImg);
+                body.find("#news_content").val(edit.content);
+                body.find(".newsStatus select").val(edit.newsStatus);
+                body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
+                body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
+                form.render();
+            }
+            setTimeout(function(){
+                layui.layer.tips('点击此处返回${object.name}列表', '.layui-layer-setwin .layui-layer-close', {
+                    tips: 3
+                });
+            },500)
+        }
+    })
+    layui.layer.full(index);
+    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+    $(window).on("resize",function(){
+        layui.layer.full(index);
+    })
+}
+
+
+
+
+$(".shenhe${object.code}").click(function(){
+	var table = layui.table;
+	var checkStatus = table.checkStatus('gridTable')
+    ,data = checkStatus.data;
+	if(data.length == 1){
+		//layer.alert(JSON.stringify(data));
+		shenhe${object.code}(null,data);
+		
+	}else
+		layer.msg('选中了：'+ data.length + ' 个');
+})
+
+</script>

@@ -1,0 +1,114 @@
+<%layout("/eova/layout/default_lay.html",{'title' : object.name + '列表'}){%>
+<body class="childrenBody">
+
+	<!-- 	查询条件 -->
+	<%if(isTrue(isQuery!)){%>
+	<#query_lay id="queryForm" objectCode="${object.code}" object="${object}"  isShow="false"/>
+	<%}%>
+
+	
+<!-- 	功能按钮 -->
+	<div class="layui-btn-group">
+	 
+	  
+	   <%include("/eova/template/common/query_lay.html",{'queryId':'queryForm', 'parentId':'master_gridTable'}){}%>
+		
+		<%if(!isEmpty(btnMap[0]!)){%>
+		  <%for(btn in btnMap[0]){
+		  try{%>
+			 <%include(btn.ui,{'menu': menu, 'object':object, 'button': btn, 'gridId': 'master_grid'}){}%>
+		  <%}catch(error){%>
+		  <script type="text/javascript">
+		  layui.use(['layer'], function(){ layer.alert("按钮 '${btn.name}' 未能加载,请联系管理员.", {icon: 2});});
+		  </script>
+		  <%}}%>
+	    <%}%>
+	  							<%// 仅超级管理员可见%>
+        						<%if(session.user.isAdmin){%>
+        						<%include("/eova/button/btn/quick_lay.html",{'menu': menu, 'object':object, 'queryId':'queryForm', 'parentId': 'grid'}){}%>
+								<%}%>
+	</div>
+	
+	<#grid_lay id="master_grid" height="full-300" objectCode="${object.code}" isSingle="true" toolbar="gridToolbar" menuCode="${menu.code}" />
+	
+	
+	 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+	  <ul class="layui-tab-title">
+		  <%for(var i=0;i<objects.~size;i++){%>
+		    <% if(i==0){%>
+		  	<li class="layui-this">
+		  	<% }else{%>
+		  	<li>
+		  	<% }%>
+		    ${objects[i].name}</li>
+		  <%}%>  
+	  </ul>
+	  <div class="layui-tab-content">
+
+	    <%for(var i=0;i<objects.~size;i++){
+	    	var x = objects[i];
+	    %>
+	    	<% if(i==0){%>
+		  	<div class="layui-tab-item layui-show">
+		  	<% }else{%>
+		  	<div class="layui-tab-item">
+		  	<% }%>
+		  			
+		  			<div class="layui-btn-group">
+	 
+					
+					
+					    
+					    <%if(!isEmpty(btnMap[i+1]!)){// 有按钮授权才显示%>
+                                <%for(btn in btnMap[i+1]){%>
+                                <%include(btn.ui,{'object':x, 'gridId': x.code + '_grid', 'parentId': 'master_grid', config : config, 'field' : config.fields[i] , 'button':btn }){}%>
+                                <%}%>
+                         <%}%>
+					  							
+					</div>
+					<#grid_lay id="${x.code}_grid"  masterId="master_grid" objectCode="${x.code}" toolbar="gridToolbar" menuCode="${menu.code}" height="180" />
+		  	</div>
+	  	<%}%>
+	   
+	  </div>
+	</div>    
+
+<script>
+
+
+
+function dataDone(res, curr, count){
+	console.log(res);
+
+		  if(res.rows.length>0){
+        		 var td = $('#master_grid').next().find('tr[data-index="0"] td input');
+        		 td.next().click();
+        	}
+
+}
+var lineId = null;
+var lineData = null;
+function lineClick(dataid,data){
+	lineId = dataid;
+	lineData = data;
+	console.log("dataid:"+dataid);
+	<%for(x in objects){%>
+		 layui.table.reload("${x.code}_gridTable",{
+			 
+		 url:'/grid/query/${x.code}',
+		 where: {${'query_' + config.fields[0]}:dataid}
+	   });
+	<%}%>
+}
+
+
+    
+
+</script>
+<script type="text/javascript" src="${STATIC!}/ui/js/template.js"></script>
+<%if(!isEmpty(menu.diy_js!)){%>
+<script type="text/javascript" src="${menu.diy_js}"></script>
+<%}%>
+
+</body>
+<%}%>

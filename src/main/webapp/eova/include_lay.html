@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="${STATIC!}/ui2/src/css/layui.css" media="all" />
+<link rel="stylesheet" href="${STATIC!}/ui2/css/public.css" media="all" />
+<link rel="stylesheet" type="text/css" href="${STATIC!}/ui/eova/css/eova.css">
+
+<!--  <link rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/style/admin.css" media="all"> -->
+
+<script type="text/javascript" src="${STATIC!}/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="${STATIC!}/ui/js/json2-min.js"></script>
+
+<script type="text/javascript" src="${STATIC!}/ui/js/common.js"></script>
+<script type="text/javascript" src="${STATIC!}/ui/js/string.js"></script>
+
+<script type="text/javascript" src="${STATIC!}/ui2/src/layui.js"></script>
+<script type="text/javascript" src="${STATIC!}/ui2/js/DataTableExtend.js"></script>
+
+<!-- <script type="text/javascript" src="http://yelog.org/layui-select-multiple/layui/layui.js"></script> -->
+
+<!-- <script type="text/javascript" src="../../ui2/js/dataList.js"></script> -->
+
+
+
+
+
+<script type="text/javascript" src="${CDN!STATIC!}/plugins/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${CDN!STATIC!}/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+
+
+
+<script type="text/javascript" src="${CDN!STATIC!}/plugins/format/jsformat.js"></script>
+
+<script type="text/javascript" src="${STATIC!}/ui/easy/easy.min.js"></script>
+<script type="text/javascript" src="${STATIC!}/ui/eova/eova.min.js"></script>
+<script type="text/javascript" src="${STATIC!}/ui/eova/src/eova.find.js"></script>
+
+
+
+<script>
+String.prototype.replaceAll  = function(s1,s2){     
+    return this.replace(new RegExp(s1,"gm"),s2);     
+} 
+// 全局JS常量配置
+var IMG = "${IMG!}";
+var FILE = "${FILE!}";
+var FILE_MAX = "${UPLOAD_FILE_SIZE!}";
+var IMG_MAX = "${UPLOAD_IMG_SIZE!}";
+
+//类似 .jpg|.gif|.png|.bmp
+var UPLOAD_IMG_TYPE = "${UPLOAD_IMG_TYPE!}".replaceAll('\\.', '');
+var UPLOAD_FILE_TYPE = "${UPLOAD_FILE_TYPE!}".replaceAll('\\.', '');
+//刷新此页面
+var refresh = function() {
+	location.reload();
+};
+
+//页面类型 add/update/detail/examine ,会优先从xxForm 中提取xx,静态页面有page变量，第3 PAGE_TYPE：add/update/detail/examine,（程序里边已经处理）
+var PAGE_TYPE = "${PAGE_TYPE!}";
+
+//监听页面大小
+var layerInitWidth;
+var layerInitHeight;
+
+</script>
+   <style>
+      
+    </style>

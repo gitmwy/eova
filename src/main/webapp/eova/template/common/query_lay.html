@@ -1,0 +1,61 @@
+<button class="layui-btn layui-btn-sm reload"  title="查询" data-type="reload"  >
+	    <i class="layui-icon"  >&#x1002;</i>
+</button>
+<script type="text/javascript">
+//搜索【此功能需要后台配合，所以暂时没有动态效果演示】
+//注意 layui 的 table.js被调整 table.reload 方法增加重置  config.where = {};
+$(".reload").on("click",function(){
+	reload();
+});
+
+var xx = 1;
+function reload(gridId){
+	//需要顺便检测下这个table 是否存在(存在图片列表 非table的)
+
+	if(gridId != null && $("#"+gridId).length > 0){
+		layui.table.reload(gridId+'Table', {url : $("#"+gridId).attr("url")});
+	}else{
+		
+		//Images
+		if($("#Images").length > 0){
+			//弹出的查找框 ${object.code!} 可能为空
+			${object.code!}_refreshflow();  
+			return;
+		}else if(isExitsFunction("grid_refreshOrg")){
+			grid_refreshOrg();
+			return;
+		}
+		
+		var formvalues = $.getFormParasObj($('#${queryId}'));
+		
+
+		
+		//console.log(JSON.stringify(formvalues));
+			console.log(formvalues);
+			//idTable =>id
+    		var gridid = "${parentId}".substring(0, "${parentId}".length-5);
+    		var isPage =	 $("#"+gridid).attr("is_page");
+    	if(isPage!= null && isPage){
+   			 layui.table.reload("${parentId}",{
+   				 url : $("#"+gridid).attr("url"),
+   			     where: formvalues,
+   			     page:true
+   			    });
+   		 } else{
+   			 
+   			 
+   			 layui.table.reload("${parentId}",{
+   			        page: {
+   			            curr: 1 //重新从第 1 页开始
+   			        },
+   			        url : $("#"+gridid).attr("url"),
+   			        where: formvalues
+   			    });
+   		 }
+	}
+}
+
+
+
+
+</script>

@@ -1,0 +1,70 @@
+<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'${button.icon!}',plain:true"
+onclick="eova_startOrder()">
+	${button.name!}
+</a>
+<script type="text/javascript">
+var startOrder = false;
+var isInsideFlush = false;
+var eova_startOrder = function() {
+
+		if(!startOrder){
+	        //可以了
+	    //console.log($("#eova_field_code_grid" ));
+	        $("#eova_field_code_grid" ).datagrid('enableDnd');
+	    //console.log($("#eova_field_code_grid" ));
+			 startOrder = true;
+		}
+    };
+   
+
+    var eova_field_code_grid_LoadSuccess = function() {
+		//console.log('数据在家完成');
+		//$("#eova_field_code_grid" ).datagrid('enableDnd');
+		if(!isInsideFlush){//外部更新
+			startOrder = false;
+			
+		}else{
+			isInsideFlush = false;//默认外部
+			 $("#eova_field_code_grid" ).datagrid('enableDnd');
+			 startOrder = true;
+		}
+		
+			
+    };   
+    
+$(document).ready(function(){
+	
+     var $eova_field_code_grid = $('#eova_field_code_grid').datagrid({
+        
+        onDrop: function(targetRow,sourceRow,point){//移动后设置排序字段的值
+        	//console.log(targetRow);
+        	//console.log(sourceRow);
+        	//console.log(point);
+        	//console.log($(this).datagrid('getRows'));
+        	$(this).datagrid('getRows').forEach(function(value,index,array){
+        		 //设置排序字段的值
+        	　　　　//code something
+        		 //$('#eova_field_code_grid').datagrid('beginEdit',index);
+        		//不能改变显示则保存然后刷新吧
+        		value.order_num = index+1;
+        		
+    			//$('#eova_field_code_grid').datagrid('endEdit', index);
+        		//$('#eova_field_code_grid').datagrid('updateRow',{index:index,row:{order_num:index+1}});
+        		
+        		//console.log(value.order_num);
+        		//$("#eova_field_code_grid" ).datagrid('endEdit', index);
+        		//$("#eova_field_code_grid" ).datagrid('refreshRow', index);
+        		//$('#dg').datagrid('getChanges');
+        	　　});
+        	//保存
+	   	     var isSuc = updateGridLines('eova_field_code_grid','eova_field_code');
+	   	  	 isInsideFlush = true;
+	   	     //不管成功失败，都需要刷新数据
+	   	     $('#eova_field_code_grid').datagrid('reload');
+	   	     
+        }
+        
+       
+    });	 
+});
+</script>

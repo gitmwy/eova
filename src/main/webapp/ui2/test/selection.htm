@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Context Menu on DataGrid - jQuery EasyUI Demo</title>
+<link rel="stylesheet" type="text/css" href="/plugins/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/plugins/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/ui/icon/icon.css">
+<link rel="stylesheet" href="/ui2/src/css/layui.css" media="all" />
+
+
+<link rel="stylesheet" type="text/css" href="/ui/css/common.css">
+<link rel="stylesheet" type="text/css" href="/ui/eova/css/eova.css">
+
+<script type="text/javascript" src="/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/js/json2-min.js"></script>
+<script type="text/javascript" src="/ui2/src/layui.js"></script>
+
+<script type="text/javascript" src="/ui/js/common.js"></script>
+<script type="text/javascript" src="/ui/js/string.js"></script>
+
+<script type="text/javascript" src="/plugins/easyui1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/plugins/easyui1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<!-- 行数据编辑模块 -->
+<script type="text/javascript" src="/ui/easy/jquery.datagrid.js"></script>
+<script type="text/javascript" src="/ui/js/datagrid-dnd.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/plugins/nice/jquery.validator.css">
+<script type="text/javascript" src="/plugins/nice/jquery.validator.js"></script>
+<script type="text/javascript" src="/plugins/nice/zh-CN.js"></script>
+<link rel="stylesheet" href="/plugins/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="/plugins/ztree/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="/plugins/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/plugins/upload/jquery-upload.js"></script>
+
+<script type="text/javascript" src="/plugins/format/jsformat.js"></script>
+
+<script type="text/javascript" src="/ui/easy/easy.min.js"></script>
+<script type="text/javascript" src="/ui/eova/eova.min.js"></script>
+<script type="text/javascript" src="/ui/eova/src/eova.find.js"></script>
+
+</head>
+<body>
+	<h2>Context Menu on DataGrid</h2>
+	<p>Right click on the header of DataGrid to display context menu.</p>
+	<div style="margin:20px 0;"></div>
+	<table id="a"></table>
+	<table id="b"></table>
+	<script type="text/javascript">
+		$(function(){
+			$('#a').datagrid({
+				url: 'datagrid_data1.json',
+				method: 'get',
+				title: 'Context Menu on DataGrid',
+				iconCls: 'icon-save',
+				width: 700,
+				height: 250,
+				fitColumns: true,
+				singleSelect: true,
+				columns:[[
+					{field:'itemid',title:'Item ID',width:80},
+					{field:'productid',title:'Product ID',width:120},
+					{field:'listprice',title:'List Price',width:80,align:'right'},
+					{field:'unitcost',title:'Unit Cost',width:80,align:'right'},
+					{field:'attr1',title:'Attribute',width:250},
+					{field:'status',title:'Status',width:60,align:'center'}
+				]],
+				onBeforeLoad: function () {
+					console.log('a no loadding');
+        	return false;
+				},
+				onLoadSuccess: function (data) {
+					
+				}
+			});
+			
+			
+			
+			
+		});
+		
+		
+		
+		$(function(){
+			$('#b').datagrid({
+				url: 'datagrid_data1.json',
+				method: 'get',
+				title: 'Context Menu on DataGrid',
+				iconCls: 'icon-save',
+				width: 700,
+				height: 250,
+				fitColumns: true,
+				singleSelect: true,
+				columns:[[
+					{field:'itemid',title:'Item ID',width:80},
+					{field:'productid',title:'Product ID',width:120},
+					{field:'listprice',title:'List Price',width:80,align:'right'},
+					{field:'unitcost',title:'Unit Cost',width:80,align:'right'},
+					{field:'attr1',title:'Attribute',width:250},
+					{field:'status',title:'Status',width:60,align:'center'}
+				]],
+				onBeforeLoad: function () {
+					console.log('b no loadding');
+        	return false;
+				},
+				onLoadSuccess: function (data) {
+					
+				}
+				
+			});
+			
+			
+			
+			
+		});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<%layout("/eova/layout/default_lay.html",{'title' : object.name! + '列表'}){%>
+<body class="childrenBody">
+
+
+	<!-- 	查询条件,系统配置的搜索条件（还会出现一个默认的过滤条件优先且需要隐藏（主要是跳转过来的数据）） -->
+	<%if(isTrue(isQuery!)){%>
+<!-- 	<blockquote class="layui-elem-quote quoteBox"> -->
+	<#query_lay id="queryForm" objectCode="${object.code}" object="${object}"  />
+	<%}%>
+	
+	
+<!-- 	功能按钮 -->
+	<div class="layui-btn-group">
+	 <%include("/eova/template/common/query_lay.html",{'queryId':'queryForm', 'parentId':'gridTable'}){}%>
+	 
+	  <%for(btn in btnList){
+	  try{%>
+		 <%include(btn.ui,{'menu': menu, 'object':object, 'button': btn, 'gridId': 'grid'}){}%>
+	  <%}catch(error){%>
+	  <script type="text/javascript">
+	  layui.use(['layer'], function(){ layer.alert("按钮 '${btn.name}' 未能加载,请联系管理员.", {icon: 2});});
+	  </script>
+	  <%}}%>
+
+	  							<%// 仅超级管理员可见%>
+        						<%if(session.user.isAdmin){%>
+        						<%include("/eova/button/btn/quick_lay.html",{'menu': menu, 'object':object, 'queryId':'queryForm', 'parentId': 'grid'}){}%>
+								<%}%>
+
+	</div>
+	
+
+	<#img_grid id="grid" objectCode="${object.code}" toolbar="gridToolbar" menuCode="${menu.code}" />
+	
+
+
+<!-- <script type="text/javascript" src="../../ui2/js/dataList.js"></script> -->
+</body>
+<script type="text/javascript" src="${STATIC!}/ui/js/template.js"></script>
+<%if(!isEmpty(menu.diy_js!)){%>
+<script type="text/javascript" src="${menu.diy_js}"></script>
+<%}%>
+<%}%>

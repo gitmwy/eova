@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout Layui</title>
+    <link rel="stylesheet" href="/ui2/src4/css/layui.css">
+    <script src="/ui2/src4/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
+<script>
+	
+	
+    layui.use(['element', 'layer', 'form', 'upload', 'treeGrid'], function () {
+        var treeGrid = layui.treeGrid; //很重要
+        var treeTable =treeGrid.render({
+            elem: '#treeTable'
+            ,url:'data.json'
+            ,cellMinWidth: 100
+            ,treeId:'sd_id'//树形id字段名称
+            ,treeUpId:'sd_up_id'//树形父id字段名称
+            ,treeShowName:'sd_name'//以树形式显示的字段
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'sd_name', edit:'text',width:'400', title: '水果'}
+                ,{field:'sd_id', edit:'text',width:'300', title: 'id'}
+                ,{field:'sd_up_id', edit:'text',width:'300', title: 'pId'}
+            ]]
+            ,page:false
+        });
+    });
+</script>
+</body>
+</html>

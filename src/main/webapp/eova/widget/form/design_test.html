@@ -1,0 +1,234 @@
+<div class="container-fluid">
+	<div class="row-fluid clearfix">
+		<div class="span12 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="ID[id]">ID</label>
+				<div class="layui-input-block">
+					<input type="text" id="id" name="id" lay-verify="required" class="layui-input" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span6 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="姓名[name]">姓名</label>
+				<div class="layui-input-block">
+					<input type="text" id="name" name="name" lay-verify="length[2~5]" class="layui-input" />
+				</div>
+			</div>
+		</div>
+		<div class="span6 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="性别[sexy]">性别</label>
+				<div class="layui-input-block">
+					 <select id="sexy" name="sexy"><option>请选择</option><option value="1">男</option><option value="0">女</option></select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="手机号[mobile]">手机号</label>
+				<div class="layui-input-block">
+					<input type="text" id="mobile" name="mobile" class="layui-input" />
+				</div>
+			</div>
+		</div>
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="备注[remark]">备注</label>
+				<div class="layui-input-block">
+					<textarea class="layui-textarea" id="remark" name="remark" lay-verify="required{shenhe_status==3}|length[10~]">
+					</textarea>
+				</div>
+			</div>
+		</div>
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="创建时间[create_time]">创建时间</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" lay-verify="required" id="create_time" name="create_time" placeholder="yyyy-MM-dd HH:mm:ss" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="修改时间[update_time]">修改时间</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" lay-verify="required" id="update_time" name="update_time" placeholder="yyyy-MM-dd HH:mm:ss" />
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="喜好1[tag1]">喜好1</label>
+				<div class="layui-input-block">
+					 <select id="tag1" name="tag1" lay-verify="required"><option>请选择</option><option value="0">坦克</option><option value="1">ADC</option><option value="2">打野</option><option value="3">AP</option></select>
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="喜好2[tag2]">喜好2</label>
+				<div class="layui-input-block">
+					 <select id="tag2" name="tag2" lay-verify="required"><option>请选择</option><option value="0">坦克</option><option value="1">ADC</option><option value="2">打野</option><option value="3">AP</option></select>
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="密码[password]">密码</label>
+				<div class="layui-input-block">
+					<input type="password" id="password" name="password" lay-verify="required|length[6~10]" placeholder="请输入密码" class="layui-input" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span2 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="头像[avatar]">头像</label>
+				<div class="layui-input-block">
+					<div class="layui-upload">
+						 <button type="button" class="layui-btn" id="avatar_button" name="avatar_button">上传图片</button><input class="layui-upload-file" type="file" accept="image/*" name="avatar_file" />
+						<div class="layui-upload-list">
+							<input type="hidden" id="avatar" name="avatar" lay-verify="required" title="头像" /><img class="layui-upload-img" id="avatar_img" alt='' />
+							<p id="avatar_text">
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="附件[file]">附件</label>
+				<div class="layui-input-block">
+					<div class="upload">
+						 <button type="button" class="layui-btn" id="file_button" name="file_button">选择文件</button><input class="layui-upload-file" type="file" accept="undefined" name="file_file" />
+						<div class="layui-upload-list">
+							<input type="hidden" id="file" name="file" title="附件" lay-verify="required" />
+							<p id="file_text">
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="span6 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="产品[relation_pro]">产品</label>
+				<div class="layui-input-block">
+					<div class="layui-input">
+						<input type="text" id="relation_pro_show" name="relation_pro_show" placeholder="请选择" class="tags-input" /><input type="hidden" id="relation_pro" name="relation_pro" lay-verify="required" title="产品" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="是否有效[status]">是否有效</label>
+				<div class="layui-input-block">
+					<div class="layui-unselect layui-form-select downpanel checkbox">
+						<input type="checkbox" id="status_checkbox" name="status_checkbox" />
+						<div class="layui-unselect layui-form-switch layui-form-onswitch">
+							<em>是</em>
+						</div><input type="hidden" id="status" name="status" value="on" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="省[p_id]">省</label>
+				<div class="layui-input-block">
+					 <select id="p_id" name="p_id"><option>请选择</option><option value="1">北京市</option><option value="19">天津市</option><option value="37">河北省</option><option value="217">山西省</option><option value="348">内蒙古自治区</option><option value="464">辽宁省</option><option value="579">吉林省</option><option value="649">黑龙江省</option><option value="792">上海市</option><option value="810">江苏省</option><option value="920">浙江省</option><option value="1021">安徽省</option><option value="1143">福建省</option><option value="1238">江西省</option><option value="1350">山东省</option><option value="1505">河南省</option><option value="1681">湖北省</option><option value="1798">湖南省</option><option value="1935">广东省</option><option value="2079">广西壮族自治区</option><option value="2205">海南省</option><option value="2236">重庆市</option><option value="2277">四川省</option><option value="2482">贵州省</option><option value="2580">云南省</option><option value="2726">西藏自治区</option><option value="2808">陕西省</option><option value="2926">甘肃省</option><option value="3027">青海省</option><option value="3080">宁夏回族自治区</option><option value="3108">新疆维吾尔自治区</option><option value="3228">台湾省</option><option value="3229">香港特别行政区</option><option value="3251">澳门特别行政区</option></select>
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="市[c_id]">市</label>
+				<div class="layui-input-block">
+					<select id="c_id" name="c_id"></select>
+				</div>
+			</div>
+		</div>
+		<div class="span3 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="区[a_id]">区</label>
+				<div class="layui-input-block">
+					<select id="a_id" name="a_id"></select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="审核状态[shenhe_status]">审核状态</label>
+				<div class="layui-input-block">
+					<div id="mycheck_shenhe_status">
+						<input type="hidden" name="shenhe_status" value="1" /> <!--<input type="radio" name="sex" value="男" title="男" /><input type="radio" name="sex" value="女" title="女" /><input type="radio" name="sex" value="禁" title="禁用" /> --><input type="radio" name="shenhe_status_radio" value="1" title="未审核" />
+						<div class="layui-unselect layui-form-radio layui-form-radioed">
+							<em class="layui-anim layui-icon"></em>
+							<div>
+								未审核
+							</div>
+						</div><input type="radio" name="shenhe_status_radio" value="2" title="审核通过" />
+						<div class="layui-unselect layui-form-radio">
+							<em class="layui-anim layui-icon"></em>
+							<div>
+								审核通过
+							</div>
+						</div><input type="radio" name="shenhe_status_radio" value="3" title="驳回" />
+						<div class="layui-unselect layui-form-radio">
+							<em class="layui-anim layui-icon"></em>
+							<div>
+								驳回
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="操作人[user_id]">操作人</label>
+				<div class="layui-input-block">
+					<input type="text" id="user_id" name="user_id" value="${user.id}" class="layui-input" />
+				</div>
+			</div>
+		</div>
+		<div class="span4 column">
+			<div class="form-group">
+				 <label class="layui-form-label" title="部门[depart_id]">部门</label>
+				<div class="layui-input-block">
+					<div class="layui-unselect layui-form-select downpanel selecttree">
+						<div class="layui-select-title">
+							 <span class="layui-input layui-unselect" id="depart_id_show">请选择</span><input type="hidden" id="depart_id" name="depart_id" title="部门" /><em class="layui-edge"></em>
+						</div>
+						<dl class="layui-anim layui-anim-upbit">
+							<dd>
+								<ul id="depart_id_tree">
+								</ul>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid clearfix">
+		<div class="span6 column">
+		</div>
+		<div class="span6 column">
+		</div>
+	</div>
+</div><script type='text/javascript'></script>

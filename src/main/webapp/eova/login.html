@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html class="loginHtml">
+<head>
+	<meta charset="utf-8">
+	<title>${APP.name}-登录</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="icon" href="../favicon.ico">
+	<link rel="stylesheet" href="../ui2/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="../ui2/css/public.css" media="all" />
+</head>
+<script type="text/javascript">
+//禁止登录页内嵌
+if (window != top){
+	parent.location.href = location.href;
+}
+
+</script>
+<body class="loginBody">
+	<form class="layui-form" id="loginForm" method="post" action="/doLogin">
+		<div class="login_face"><img src="../ui2/images/face.jpg" class="userAvatar"></div>
+		<div class="layui-form-item input-item ${!isEmpty(loginId!)?'layui-input-active'}">
+			<label for="userName">用户名</label>
+			<input type="text" placeholder="请输入用户名" autocomplete="off" name="loginId" id="user_name"  value="${loginId!}" class="layui-input" lay-verify="required" >
+		</div>
+		<div class="layui-form-item input-item ${!isEmpty(loginPwd!)?'layui-input-active'}">
+			<label for="password">密码</label>
+			<input type="password" placeholder="请输入密码" autocomplete="off" id="user_password" value="${loginPwd!}" name="loginPwd" class="layui-input" lay-verify="required" >
+		</div>
+		<%if(isTrue(isCaptcha!)){%>
+		<div class="layui-form-item input-item" id="imgCode">
+			<label for="code">验证码</label>
+			<input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input" name="captcha" id="captcha" lay-verify="required">
+			<img src="/captcha" onclick="this.src='/captcha?'+Math.random()" height="36px" width="97px"  > 
+		</div>
+		<%}%>
+		<div class="layui-form-item">
+			<button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>
+		</div>
+		<div class="layui-form-item layui-row">
+				<b><font size="3" color="red">${msg!}</font></b>
+				<%if(!isTrue(isCaptcha!)){%>
+				<br>
+				<b>角色：超管,帐号:eova,密码:000000,请不要修改密码</b>
+				<%}%>
+<!-- 			<a href="javascript:;" class="seraph icon-qq layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a> -->
+<!-- 			<a href="javascript:;" class="seraph icon-wechat layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a> -->
+<!-- 			<a href="javascript:;" class="seraph icon-sina layui-col-xs4 layui-col-sm4 layui-col-md4 layui-col-lg4"></a> -->
+		</div>
+		<div class="layui-copy">
+            ${APP.copyright!}
+		</div>
+		<div class="layui-form-item layui-row">
+            <span style="color: #FF5722;">由于开放了系统管理员权限以体验配置开发功能，可能会出现部分人员调整导致系统登陆不了或者配置demo不见所以系统将在每日凌晨恢复配置数据，如遇登陆不了或者demo查看不了请加群让管理员恢复
+            </span>
+            <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=54022a26ee29e2ed58ab95091a63918e399897ae5cf749526c8ac4191672ca76"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="积木" title="积木"></a>
+		</div>
+	</form>
+	<script type="text/javascript" src="../ui2/layui/layui.js"></script>
+	<script type="text/javascript" src="../ui2/login/login.js"></script>
+	<script type="text/javascript" src="../ui2/js/cache.js"></script>
+</body>
+</html>

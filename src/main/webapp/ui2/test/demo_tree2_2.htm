@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="../../js/jquery-3.3.1.js"></script>-->
+
+    <script src="DataTableExtend.js"></script>
+        <link rel="stylesheet" href="/ui2/src/css/layui.css">
+    <script src="/ui2/src/layui.js"></script>
+    <script src="DataTableExtend.js"></script>
+
+    <script>
+        (function () {
+            layui.use(['table', 'layer'], function () {
+                var table = layui.table;
+                var layer = layui.layer;
+                var $ = layui.jquery;
+                table.render({
+                    id: "tableID"// 设定表格的唯一ID进行标识
+                    , elem: '#tableDataLoad'// 绑定table对应的元素
+                    , height: 'full-10'
+                    , url: 'data2.json' // TODO: 此处写你实际数据来源
+                    , size: 'sm'
+                    , page: true
+                    , limits: [10, 20, 30, 40, 50]
+                    , limit: 30
+                    , cols: [[
+                        {field: 'match_name', width: 93, align: 'center', title: '比赛名称', rowspan: 2}
+                        , {align: 'center', title: '比赛信息', colspan: 3}
+                        , {field: 'jingcai', width: 200, align: 'center', title: '竞猜项', rowspan: 2}
+                        , {field: 'num', width: 100, align: 'center', title: '竞猜数量', rowspan: 2}
+                    ]
+                        , [
+                            {field: 'match_time_beijing', width: 200, align: 'center', title: '比赛时间'}
+                            , {field: 'match_master', width: 100, align: 'center', title: '主队'}
+                            , {field: 'match_guest', width: 100, align: 'center', title: '客队'}
+                        ]]
+                    , done: function (res, curr, count) {// 表格渲染完成之后的回调
+
+                        $(".layui-table th").css("font-weight", "bold");// 设定表格标题字体加粗
+
+                        LayUIDataTable.SetJqueryObj($);// 第一步：设置jQuery对象
+
+                        //LayUIDataTable.HideField('num');// 隐藏列-单列模式
+                        //LayUIDataTable.HideField(['num','match_guest']);// 隐藏列-多列模式
+
+                        var currentRowDataList = LayUIDataTable.ParseDataTable(function (index, currentData, rowData,line) {
+                           // console.log("当前页数据条数:" + currentRowDataList.length)
+                            console.log("选中当前行索引：" + index);
+                           // console.log("触发的当前行单元格：" + currentData);
+                           // console.log("当前行数据：" + JSON.stringify(rowData));
+          
+                            
+                            $.each(currentRowDataList, function (i, obj) {//当前设置颜色，其他的取消
+                            	 if(i == index)
+                            		 obj['num']["row"].css("background-color", "#ffe48d");
+                            	 
+                            	 else{
+                            		 obj['num']["row"].css("background-color", "");
+                            	 }
+                            });
+                            
+                           
+                            
+                            
+                            //var msg = '<div style="text-align: left"> 【当前页数据条数】' + currentRowDataList.length + '<br/>【当前行索引】' + index + '<br/>【触发的当前行单元格】' + currentData + '<br/>【当前行数据】' + JSON.stringify(rowData) + '</div>';
+                           
+                            //$(rowData).css("background-color", "#FAB000");
+                            //rowData.css("background-color", "#ffe48d");
+                            //layer.msg(msg);
+                        })
+
+                        // 对相关数据进行判断处理--此处对【竞猜数量】大于30的进行高亮显示
+                        $.each(currentRowDataList, function (index, obj) {
+                        	console.log(obj);
+                             /*
+                                * 通过遍历表格集合，拿到每行数据对象obj，通过obj["列名"]["row"]可以拿到行对象，obj["列名"]["cell"]可以拿到单元格对象
+                                * */
+                            if (obj['num'] && obj['num'].value > 30) {
+                                //obj['num']["row"].css("background-color", "#FAB000");// 对行（row）进行高亮显示
+                               // obj["num"]["cell"].css("font-weight","bold");// 对单元格（cell）字体进行加粗显示
+                            }
+                        })
+                    }// end done
+
+
+                });//end table.render
+
+                function dealLighthigh (rowIndexArr, bgColor) {
+                    $.each(rowIndexArr, function (index, val) {
+                        if (typeof val == "number") {
+                            $($(".layui-table-body.layui-table-main tr")[val]).css("background-color", bgColor ? bgColor : "yellow");
+                            $($("div .layui-table-fixed.layui-table-fixed-l .layui-table-body tr")[val]).css("background-color", bgColor ? bgColor : "yellow");
+                        } else if (typeof val == 'object') {
+                            $($(".layui-table-body.layui-table-main tr")[val.rowIndex]).css("background-color", val.bgColor ? val.bgColor : "yellow");
+                            $($("div .layui-table-fixed.layui-table-fixed-l .layui-table-body tr")[val.rowIndex]).css("background-color", val.bgColor ? val.bgColor : "yellow");
+                        }
+                    })
+                }
+
+
+            });// end layui use
+        })()
+    </script>
+</head>
+<body>
+<table id="tableDataLoad" lay-filter="demo"></table>
+
+</body>
+</html>

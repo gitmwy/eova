@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="http://127.0.0.1:801/ui2/src/css/layui.css"  media="all">
+<!--   <script src="http://127.0.0.1:801/ui2/layui/layui.all.js" charset="utf-8"></script> -->
+  <script src="http://127.0.0.1:801/ui2/src/layui.js" charset="utf-8"></script>
+  <script src="http://127.0.0.1:801/ui/js/jquery.min.js" charset="utf-8"></script>
+  <script src="http://127.0.0.1:801/ui/js/common.js" charset="utf-8"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+<!--   http://fly.layui.com/jie/27418/ -->
+<!-- http://127.0.0.1:801/3334.htm -->
+     <style>
+      .tags-item{
+    background-color: #eee; 
+    padding: 3px;
+    border-radius: 3px;
+    margin-right:3px;
+}
+.tags-input{
+    border: none;
+    height: 36px;
+    line-height: 1.3;
+}
+      
+    </style>
+</head>
+<body>
+ 
+
+<!--   <input type="text" id="tagsValue"   > -->
+
+<br>
+
+<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table> //声名
+
+<br><br>
+<button class="layui-btn" id="add" value="add" lay-filter="myclick">+++</button>
+<button class="layui-btn" id="reduce" value="reduce" lay-filter="myclick">---</button>
+</body>
+<script>
+
+layui.use(['element', 'layer', 'form', 'upload', 'treeGrid'], function () { 
+
+	var treeGrid = layui.treeGrid; //很重要
+
+	var treeTable = treeGrid.render({
+	            elem: '#treeTable'
+	            ,id:'treeTable' //这一行一定需要,和上一行不一样,这个是需要用来作数据修改和定位的
+	            ,levelField:'level' //表示树的级别字段,从1开始,从数据Json传回时必须是1,2,3,4,5...
+	            ,paramName:'parentId' //表示树向下展开时向后端传弟的参数名称,值就是作用的paramValue
+	            ,paramValue:'id' //表示树向下展开时向后端传弟的参数名称,一定是{url}+{paramName}={paramValue},现在就是{url}+parentId={id}
+	            ,scopeField:'baseCode' //表示树的图标作用在哪个字段前面,并表示父亲需向下传递的参数,一定是{url}+{parentParame}={baseCode},该字段一定要显示
+	            ,url: '/web/dictTree/getDataByParentId'
+	            ,cols: [[
+	                {checkbox: true, fixed: true}
+	                ,{field:'baseCode', title: '编号', width:140}
+	                ,{field:'id', title: 'ID', width:80}
+	                ,{field:'keyName', width:140 ,title: '键名称'}
+	                ,{field:'keyShortName', width:140 ,title: '键简称'}
+	                ,{field:'keyValue', width:140 ,title: '键值'}
+	                ,{field:'typeValue', width:140 ,title: '类型值'}
+	                ,{field:'note', width:140 ,title: '备注'}
+	                ,{field:'sort', width:100 ,title: '排序',fixed: 'right'}
+	                ,{field:'isPublic', width:100 ,title: '状态',templet: '#isPublicTpl',fixed: 'right'}
+	            ]]
+	            ,limit:300
+	            ,page: false
+	            ,height: 'full-200'
+	        });
+
+
+</script>
+</html>

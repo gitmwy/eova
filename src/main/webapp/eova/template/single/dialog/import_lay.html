@@ -1,0 +1,120 @@
+<%layout("/eova/layout/default_lay.html",{'title' : '导入数据'}){%>
+<body>
+<div style="padding: 5px;font-size: 10px;">
+新增导入(目前只支持单表.xls格式，.xlsx、视图后续补充)：<br />
+如果导入的Excel表格中没有主键列，则自动新增所有行的数据。<br />
+更新导入：<br />
+如果导入的Excel表格中存在主键列，则自动根据每行主键更新相关数据(当然可以自定自己拦截器定制更新)。<br />
+</div>
+<div style="padding: 5px;">
+
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+	  <legend>选完文件后请提交文件</legend>
+	</fieldset>
+	 
+	<div class="layui-upload">
+	  <button type="button" class="layui-btn layui-btn-normal" id="upfile">选择文件</button>
+	  <button type="button" class="layui-btn" id="upfilebt">开始上传</button>
+	</div>
+
+</div>
+
+<iframe name="ajaxUpload" style="display:none">
+</iframe>
+
+<script>
+layui.use('upload', function(){
+  var upload = layui.upload;
+   
+  //执行实例
+//选完文件后不自动上传
+  upload.render({
+    elem: '#upfile'
+    ,url: '/single_grid/doImportXls/${menuCode}'
+    ,accept:'file'
+    ,exts:'xls'
+    ,size: FILE_MAX //限制文件大小，单位 KB
+    ,field:'upfile'
+    ,auto: false
+    ,field:'upfile'
+    //,multiple: true
+    ,bindAction: '#upfilebt'
+    ,done: function(res){
+    	if (res.status == 200) {
+			//$.slideMsg("删除成功！");
+			//$.widgetReLoad($widget);
+			
+			//layer.msg("导入成功");
+			//提示（需要确定的			
+			layer.alert(res.msg+"<br/>共计处理："+res.count, {icon: 1}, function(index){
+				  //do something
+				  
+				  layer.close(index);
+				  
+				  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				  parent.layer.close(index);
+					
+					
+				  parent.reload();
+				}); 
+		} else {
+			//$.alert($, result.msg);
+			
+			layer.msg(res.msg);
+		}
+    }
+  });
+  
+  
+});
+</script>
+
+<script type="text/javascript">
+
+
+
+
+	var extArray = new Array(".xls");
+	function limit(file){
+	    var allowSubmit = false;
+	    if (!file){
+	        return;
+	    }
+	    while (file.indexOf("\\") != -1){
+	        file = file.slice(file.indexOf("\\") + 1);
+	    }
+	    var ext = file.slice(file.lastIndexOf(".")).toLowerCase();
+	    for (var i = 0; i < extArray.length; i++) {
+	        if (extArray[i] == ext){
+	            allowSubmit = true;
+	            break;
+	        }
+	    }
+	    if (!allowSubmit){
+	    	alert("只能上传以下格式的文件:"+ (extArray.join("")) + "\n请重新选择再上传.");
+	    	return false;
+	    }
+	    return true;
+	}
+
+	var btnSaveCallback = function($dialog, $widget, $pjq) {
+		var $fm = $('#importForm');
+		var $file = $('#upfile');
+		if (limit($file.val())) {
+			$fm.submit();
+		}
+	};
+	
+	// 上传回调:IFrame Ajax上传
+	var callback = function (msg, success){
+		if (success) {
+			$.slideMsg(msg, parent.$);
+		} else {
+			$.alert(parent.$, msg);
+		}
+		parent.$.widgetReLoad($('#grid'));
+		parent.$('#import_dialog').dialog('destroy');
+	}
+</script>
+</body>
+<%}%>

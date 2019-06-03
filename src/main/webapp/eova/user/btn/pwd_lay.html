@@ -1,0 +1,57 @@
+ <button class="layui-btn layui-btn-sm psw_edit"  title="${button.name!}">
+	    <i class="layui-icon"  >${button.icon!}</i>
+</button>
+<script type="text/javascript">
+$(function () {
+var psw_edit = function(data) {
+	var newpsw = '';
+	layer.prompt({
+		  formType: 1,
+		  value: '',
+		  title: '请输入重置密码',
+		  area: ['800px', '350px'] //自定义文本域宽高
+		}, function(value, index, elem){
+		  
+		  if( value.length<6 ){
+			  layer.msg('密码长度不够!');
+			  
+			  return;
+		  }else{
+			  newpsw  = value.trim();
+			  
+			  $.ajax({
+	    			url : '/user/pwd/' + data[0].pk_id + '-' + newpsw,
+	    			dataType : 'json',
+	    			success : function(o) {
+	    				if (o.success) {
+	    					
+	    					layer.msg('修改密码成功！');
+	    					layer.close(index);
+	    				} else {
+	    					layer.msg("操作错误:"+o.msg);
+	    				}
+	    			}
+	    		});
+			  
+			  
+			  
+		  }  
+		});
+	
+	
+};
+$(".psw_edit").click(function(){
+	
+	var table = layui.table;
+	var checkStatus = table.checkStatus('${gridId!}Table')
+    ,data = checkStatus.data;
+	if(data.length !=1){//只能修改一个，后面如果有必要改成修改多个
+		//layer.alert(JSON.stringify(data));
+		
+		layer.msg('选中了：'+ data.length + ' 个');
+	}else{
+		psw_edit(data);
+	}
+})
+});
+</script>

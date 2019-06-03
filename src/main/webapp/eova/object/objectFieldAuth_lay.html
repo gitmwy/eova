@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>对象数据权限设置</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="renderer" content="webkit">
+<link rel="stylesheet" href="/ui2/src/css/layui.css" media="all" />
+<link rel="stylesheet" href="/ui2/css/public.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/ui/eova/css/eova.css">
+
+<!--  <link rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/style/admin.css" media="all"> -->
+
+<script type="text/javascript" src="/ui/js/jquery.min.js"></script>
+<script type="text/javascript" src="/ui/js/json2-min.js"></script>
+
+<script type="text/javascript" src="/ui/js/common.js"></script>
+<script type="text/javascript" src="/ui/js/string.js"></script>
+
+<script type="text/javascript" src="/ui2/src/layui.js"></script>
+<script type="text/javascript" src="/ui2/js/DataTableExtend.js"></script>
+
+<!-- <script type="text/javascript" src="http://yelog.org/layui-select-multiple/layui/layui.js"></script> -->
+
+<!-- <script type="text/javascript" src="../../ui2/js/dataList.js"></script> -->
+
+
+
+
+
+<script type="text/javascript" src="/plugins/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+
+
+
+<script type="text/javascript" src="/plugins/format/jsformat.js"></script>
+
+<script type="text/javascript" src="/ui/easy/easy.min.js"></script>
+<script type="text/javascript" src="/ui/eova/eova.min.js"></script>
+<script type="text/javascript" src="/ui/eova/src/eova.find.js"></script>
+
+
+
+<script>
+String.prototype.replaceAll  = function(s1,s2){     
+    return this.replace(new RegExp(s1,"gm"),s2);     
+} 
+// 全局JS常量配置
+var IMG = "${IMG!}";
+var FILE = "${FILE!}";
+var FILE_MAX = "${UPLOAD_FILE_SIZE!}";
+var IMG_MAX = "${UPLOAD_IMG_SIZE!}";
+
+//类似 .jpg|.gif|.png|.bmp
+var UPLOAD_IMG_TYPE = "${UPLOAD_IMG_TYPE!}".replaceAll('\\.', '');
+var UPLOAD_FILE_TYPE = "${UPLOAD_FILE_TYPE!}".replaceAll('\\.', '');
+//刷新此页面
+var refresh = function() {
+	location.reload();
+};
+
+//页面类型 add/update/detail/examine
+var PAGE_TYPE = "${PAGE_TYPE!}";
+
+//监听页面大小
+var layerInitWidth;
+var layerInitHeight;
+
+</script>
+</head>
+
+<!--  <link rel="stylesheet" href="http://www.layui.com/admin/std/dist/layuiadmin/style/admin.css" media="all"> -->
+      <link href="/plugins/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+   <script type="text/javascript" charset="utf-8" src="/plugins/umeditor/umeditor.config.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/plugins/umeditor/umeditor.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+  <script type="text/javascript" charset="utf-8" src="/plugins/umeditor/lang/zh-cn/zh-cn.js"></script>
+<body>
+
+<!-- http://127.0.0.1:801/obj/toObjectRoleChoose/1155?template=lay -->
+<!--  暂时只做下属角色数据分配，不做数据范围筛选  -->
+<div class="layui-tab">
+  <ul class="layui-tab-title">
+<%for(onerole in roles){ %>
+ 	<li ${oneroleLP.index ==1?'class="layui-this"':''}>${onerole.name!}</li>
+<% } %>
+   
+   <!--  <li class="layui-this">网站设置</li>
+    <li>用户管理</li>
+    <li>权限分配</li>
+    <li>商品管理</li>
+    <li>订单管理</li> -->
+  </ul>
+  
+
+  
+  <div class="layui-tab-content">
+ <%for(onerole in roles){ 
+ 
+ 	var oneRoleFields = roleFields[onerole.id+''];
+ %> 
+  	<div class="layui-tab-item ${oneroleLP.index ==1?'layui-show':''}">
+  		<form id="updateRoleForm_${onerole.id}" name="updateRoleForm_${onerole.id}" method="post"  class="layui-form layui-form-pane">
+	    	<input type="hidden" name="rid" value="${onerole.id}">
+	    	<input type="hidden" name="obj_id" value="${object.id}">
+	    	<div class="layui-form">
+	    		<table class="layui-table">
+				    <colgroup>
+				      <col width="150">
+				      <col width="350">
+				      <col width="200">
+				      <col>
+				    </colgroup>
+				    <thead>
+				      <tr>
+				        <th>序号</th>
+				        <th>字段名</th>
+				        <th>字段类型</th>
+				        <th>操作</th>
+				      </tr> 
+				    </thead>
+				    <tbody>
+				    
+				    <% for(oneroleField in oneRoleFields){ debug(oneroleField);%>
+				      <tr>
+				        <td>${oneroleField.order_num!}</td>
+				        <td>${oneroleField.cn!}(${oneroleField.en!})</td>
+				        <td>${oneroleField.type!}</td>
+				        <td>
+				        <% if(oneroleField.rf_is_show! == null){ %>
+				        	<input type="checkbox" name="fieldId" value="${oneroleField.id!}" title="显示" lay-skin="primary" checked>
+				        <% }else if(oneroleField.rf_is_show! ){ %>
+				        	<input type="checkbox" name="fieldId" value="${oneroleField.id!}" title="显示" lay-skin="primary" checked>
+				        <% }else if(!oneroleField.rf_is_show!){ %>
+				        	<input type="checkbox" name="fieldId" value="${oneroleField.id!}" title="显示" lay-skin="primary">
+				        <% } %>
+				        </td>
+				      </tr>
+				     <% } %> 
+				      
+				    </tbody>
+				  </table>
+	    	</div>
+			<div class="layui-form-item">
+			    <div class="layui-input-block">
+			      <button class="layui-btn" lay-submit="" lay-filter="submit">
+			    	  立即提交
+			      </button>
+			
+			
+			
+			</div>
+			</div>
+  	  	</form>
+  	</div>
+<% } %>  	
+   
+  </div>
+</div>
+
+
+
+
+
+<script>
+
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+layui.use(['form','code','element'], function(){
+	var element = layui.element;
+	  var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+	   $ = layui.$;
+	   
+     
+	
+	  
+	  //但是，如果你的HTML是动态生成的，自动渲染就会失效
+	  //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+       form.on('submit(submit)', function(data){
+    		  //console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+    		 //console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+    		  //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+    		  //console.log(syntaxHighlight(data.field));
+    		var $form = $('#'+data.form.name);
+    		var myform = $.getFormParasObj($form);
+    		//console.log(myform);
+    		  //提交数据
+    		  submitNow(myform);
+    		  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    		});
+	  
+	}); 
+
+
+</script>
+
+<script type="text/javascript">
+//var $form = $('#updateFormeova_object_code');
+
+var submitNow = function(form) {	
+	$.post('/obj/saveObjectFieldRole', form, function(result) {
+		if (result.status == 200) {
+			
+			
+			
+			layer.msg('保存成功!');
+		} else {
+			//$.alert($pjq, result.msg);
+			layer.alert(result.msg, {icon: 2});
+		}
+	}, 'json');
+};
+
+
+
+</script>
+</body>
+
+
+
+</html>

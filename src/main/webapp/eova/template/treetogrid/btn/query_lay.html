@@ -1,0 +1,49 @@
+<button class="layui-btn layui-btn-sm reload"  title="查询" data-type="reload"  >
+	    <i class="layui-icon"  >&#x1002;</i>
+</button>
+<script type="text/javascript">
+$(".reload").on("click",function(){
+	reload();
+});
+    
+    function reload(gridId){
+    			var	dtree = layui.dtree;
+    			var param = dtree.getNowParam('master_tree');
+    			var nodeId = param.nodeId;
+    			
+    			if(nodeId){
+    				
+    			}else{
+    				layer.msg('请选择一个树节点', {icon: 5}, {anim:6});
+    				return;
+    			}
+    			
+    			
+    			var formvalues = $.getFormParasObj($('#${queryId}'));
+    			formvalues['query_${menu.config.objectField}'] = nodeId;
+
+      
+        		//idTable =>id
+        		var gridid = "${parentId}".substring(0, "${parentId}".length-5);
+
+
+        		
+        		
+        		 layui.table.reload("${parentId}",{
+        	        page: {
+        	            curr: 1 //重新从第 1 页开始
+        	        },
+        	        url : $("#"+gridid).attr("url"),
+        	        where: formvalues
+        	    });
+    			
+    	
+    		
+    		
+    	
+    }
+
+    
+ 
+
+</script>

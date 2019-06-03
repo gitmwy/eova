@@ -1,0 +1,54 @@
+<button class="layui-btn layui-btn-sm delall" title="删除1">
+ 	    <i class="layui-icon">&#xe640;</i> 
+</button>
+<script type="text/javascript">
+//批量删除
+$(".delall").click(function(){
+	var table = layui.table;
+
+	  var $checkbox = $('#Images li input[type="checkbox"]');
+	    var $checked = $('#Images li input[type="checkbox"]:checked');
+		
+
+
+    
+    if($checked.length > 0) {
+    	var delObjs = [];
+ 	    $checked.each(function(){
+            var input = $(this);
+             
+            var oneObj =new Object();
+            oneObj[input.attr("name")] = input.val()
+             
+             delObjs.push(oneObj);
+         });
+ 	   // console.log(delObjs);
+
+        layer.confirm('确定删除选中的${object.name}？', {icon: 3, title: '提示信息'}, function (index) {
+        	
+        	var json = JSON.stringify(delObjs);
+			$.syncPost('/grid/delete/${object.code}' , {
+				rows : json
+			}, function(result, status) {
+				if (result.success) {
+					//$.slideMsg("删除成功！");
+					//$.widgetReLoad($widget);
+					
+					layer.msg("删除成功。");
+					reload();
+				} else {
+					//$.alert($, result.msg);
+					
+					layer.msg("删除失败。");
+				}
+			});
+        	
+          
+        })
+    }else{
+        layer.msg("请选择需要删除的${object.name}");
+    }
+});
+
+
+</script>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="http://127.0.0.1:801/ui2/layui/css/layui.css"  media="all">
+    <script src="http://127.0.0.1:801/ui/js/jquery.min.js" charset="utf-8"></script>
+  <!-- 注意：单选 以及 行点击选中效果 -->
+</head>
+<body>
+
+   <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+   <p id="test2">这是段落中的<b>粗体</b>文本。</p>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+ 
+
+ 
+
+              
+          
+<script src="http://127.0.0.1:801/ui2/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 --> 
+
+<script type="text/html" id="checkbox">
+ <a  lay-event="detail"><input type="checkbox" name="like1[write]" lay-skin="primary" lay-filter="encrypt" title="" ></a>
+
+</script>
+<script>
+
+
+             
+
+//https://blog.csdn.net/damosk/article/details/79609272
+//https://blog.csdn.net/hebo5207_/article/details/53054575
+layui.use(['table','element'], function(){
+  var table = layui.table
+  ,form = layui.form
+  ,element = layui.element;;
+  
+  table.render({
+    elem: '#test'
+    ,url:'/1.json'
+    ,cellMinWidth: 80
+    ,cols: [[
+      {type:'numbers'}
+     ,{type: 'checkbox'}
+      //,{field:'lock0', title:'', width:50, toolbar: '#checkbox'}
+      ,{field:'id', title:'ID', width:100, unresize: true, sort: true}
+      ,{field:'username', title:'用户名', templet: '#usernameTpl'}
+      ,{field:'city', title:'城市'}
+      ,{field:'wealth', title: '财富', minWidth:120, sort: true}
+      ,{field:'sex', title:'性别', width:85, templet: '#switchTpl', unresize: true}
+    
+
+    ]]
+    ,page: true
+    ,done: function(res, curr, count){
+        //如果是异步请求数据方式，res即为你接口返回的信息。
+        //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+        console.log(res);
+        
+        //得到当前页码
+        console.log(curr); 
+        
+        //得到数据总量
+        console.log(count);
+        //隐藏全选
+        var checkAll = $("#test").next()
+	  	.find("div[class='layui-table-box']")
+	  	.children("div[class='layui-table-header']")
+	  	.find("input[name='layTableCheckbox']").next().children();
+	      console.log(checkAll.html());
+	    
+	      //if(curr == 1)
+	      	checkAll.hide();//隐藏div
+      }
+  });
+  
+  table.on('tool(test)', function(obj){
+	  console.log(obj.data);
+	  
+  });
+  
+  //监听表格复选框选择
+  table.on('checkbox(test)', function(obj){
+	
+    console.log(obj);
+    var cid= obj.data.id;
+    console.log(obj['checked']+":"+cid);
+    
+    //console.log(  obj.data.LAY_CHECKED);
+    var checked = obj.data.LAY_CHECKED;
+    var index = obj.data.LAY_TABLE_INDEX;
+    
+    var checkStatus = table.checkStatus('test');
+    console.log(checkStatus);
+    
+    if(checked){//需要检测是否还有其他选中的，如果有选中则关闭其他选中的
+    	
+    	
+    	var tableBox = $("#test").next()
+	  	.find("div[class='layui-table-box']");
+    	
+    //var temp = tableBox.find("div[class='layui-unselect layui-form-checkbox layui-form-checked']");
+    	//可能涉及到多table，需要限定范围
+    	//$("input:checkbox[name='layTableCheckbox']:checked").each(function() { // 遍历name=test的多选框
+    		//遍历选中的
+    	tableBox.find("div[class='layui-unselect layui-form-checkbox layui-form-checked']").each(function() {	
+    	
+    		 //layui-unselect layui-form-checkbox layui-form-checked
+    		
+    	//".layui-table-fixed.layui-table-fixed-l");
+    		
+    		
+    		var data_index = $(this).parent().parent().parent().attr("data-index");
+    		
+    		if(index != data_index){
+    			//设置为未选中
+    			console.log($(this).children());
+    			$(this).children().click();
+
+    		}else{
+    			
+    		}
+    		
+    		 // $(this).val();  // 每一个被选中项的值
+    		  //console.log( $(this)['name'] );
+    		});
+    	
+    }else{//非选中
+    	//do nothing 
+    }
+    
+  });
+  
+  var $ = layui.$, active = {
+		    getCheckData: function(){ //获取选中数据
+		      var checkStatus = table.checkStatus('test')
+		      ,data = checkStatus.data;
+		      console.log($("#test").prev());
+		      console.log($("#test").prev().html());
+		      
+		      var checkAll = $("#test").next()
+		  	.find("div[class='layui-table-box']")
+		  	.children("div[class='layui-table-header']")
+		  	.find("input[name='layTableCheckbox']").next();
+		      console.log(checkAll.html());
+		      
+		      checkAll.hide();//隐藏div
+		      checkAll.hide();
+		     // checkAll.attr("style","display:none;");
+		      layer.alert(JSON.stringify(data));
+		    }
+		    ,getCheckLength: function(){ //获取选中数目
+		      var checkStatus = table.checkStatus('test')
+		      ,data = checkStatus.data;
+		      layer.msg('选中了：'+ data.length + ' 个');
+		    }
+		    ,isAll: function(){ //验证是否全选
+		      var checkStatus = table.checkStatus('test');
+		      layer.msg(checkStatus.isAll ? '全选': '未全选')
+		    }
+		  };
+		  
+		  $('.layui-btn').on('click', function(){
+		    var type = $(this).data('type');
+		    active[type] ? active[type].call(this) : '';
+		  });
+		  
+	//如果是单选隐藏全选按钮
+	;
+	
+	var checkAll = $("#test").next()
+	.find("div[class='layui-table-box']")
+	.children("div[class='layui-table-header']")
+	.find("input[name='layTableCheckbox']").next();
+	
+	
+	console.log( checkAll );
+	checkAll.attr("style","display:none;");
+	//checkAll.hide();
+	
+	//checkAll.css("display", "none");  
+	//checkAll.attr("style","display:none;");
+});
+
+//单击行勾选checkbox事件
+$(document).on("click",".layui-table-body table.layui-table tbody tr", function () {
+    var index = $(this).attr('data-index');
+    var tableBox = $(this).parents('.layui-table-box');
+    //存在固定列
+    if (tableBox.find(".layui-table-fixed.layui-table-fixed-l").length>0) {
+        tableDiv = tableBox.find(".layui-table-fixed.layui-table-fixed-l");
+    } else {
+        tableDiv = tableBox.find(".layui-table-body.layui-table-main");
+    }
+    var checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.laytable-cell-checkbox div.layui-form-checkbox I");
+   
+    if (checkCell.length>0) {
+    	console.log( checkCell );
+    	
+    	 var checkbox = tableDiv.find("tr[data-index=" + index + "]").find("input:checkbox")[0];
+    	 //console.log( checkbox.nextSbiling );
+    	
+    	//$("input:checkbox[name='layTableCheckbox']:checked")
+    	//checkbox.attr('checked', 'true');
+		//checkbox.click();
+       // checkCell.click();
+        
+        
+        //需要判断是否存在其他，
+        checkCell.click();
+    }
+});
+
+$(document).on("click", "td div.laytable-cell-checkbox div.layui-form-checkbox", function (e) {
+    e.stopPropagation();
+});
+</script>
+
+</body>
+</html>

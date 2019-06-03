@@ -1,0 +1,67 @@
+ <button class="layui-btn layui-btn-sm add${object.code}"  title="添加" >
+	    <i class="layui-icon"  >&#xe654;</i>
+</button>
+<script type="text/javascript">
+$(function () {
+//添加
+function add(edit,extra){
+    	var index = layui.layer.open({
+        title : "新增${object.name}",
+        type : 2,
+        content : "/form/add/${object.code}?template=lay"+"&"+extra,
+        success : function(layero, index){
+            var body = layui.layer.getChildFrame('body', index);
+            if(edit){
+                body.find(".newsName").val(edit.newsName);
+                body.find(".abstract").val(edit.abstract);
+                body.find(".thumbImg").attr("src",edit.newsImg);
+                body.find("#news_content").val(edit.content);
+                body.find(".newsStatus select").val(edit.newsStatus);
+                body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
+                body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
+                form.render();
+            }
+            setTimeout(function(){
+                layui.layer.tips('点击此处返回${object.name}列表', '.layui-layer-setwin .layui-layer-close', {
+                    tips: 3
+                });
+            },500)
+        }
+    })
+    layui.layer.full(index);
+    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+    $(window).on("resize",function(){
+        layui.layer.full(index);
+    })
+}
+
+$(".add${object.code}").click(function(){
+	// ------------------------------级联
+    var ref = '';
+	var parent = $('#${parentId!}');
+	
+	 var checkStatus = layui.table.checkStatus('${parentId!}Table')
+     ,data = checkStatus.data;
+     console.log(data);
+    
+    if(data.length == 0) {//父节点未选中（如没有数据），不触发事件
+    	
+    	return;
+    }
+	
+   	// 主对象关联字段
+    var objectField = '${config.objectField!}';
+    // 子对象关联字段
+    var field = '${field!}';
+	if(parent && objectField != '' && field != ''){
+		// 从父组件上获取选中外键值
+
+		ref = "ref=" + field + ":" + lineId;
+	}
+	// ------------------------------级联
+	add(null,ref);
+})
+});
+
+
+</script>

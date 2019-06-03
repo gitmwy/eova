@@ -1,0 +1,67 @@
+ <button class="layui-btn layui-btn-sm passign"  title="权限分配" >
+	    <i class="layui-icon"  >&#xe613;</i>
+</button>
+<script type="text/javascript">
+$(function () {
+//添加
+function passign(edit,data){		
+    	var index = layui.layer.open({
+        title : '['+ data[0].name +']可用功能选择',
+        type : 2,
+        content : '/auth/toRoleChoose/' + data[0].pk_id+'?template=lay',
+        btn: ['确定'],
+        yes: function(index, layero){//按钮确定触发事件
+        	var iframeWin = window[layero.find('iframe')[0]['name']];
+	    	//console.log(iframeWin.getCheckIds());
+	    	
+	    	iframeWin.btnSaveCallback();
+	    	//保存数据
+	    	//iframeWin.btnSaveCallback;
+	    	
+        },
+        success : function(layero, index){
+        	
+    	    	
+            var body = layui.layer.getChildFrame('body', index);
+            if(edit){
+                body.find(".newsName").val(edit.newsName);
+                body.find(".abstract").val(edit.abstract);
+                body.find(".thumbImg").attr("src",edit.newsImg);
+                body.find("#news_content").val(edit.content);
+                body.find(".newsStatus select").val(edit.newsStatus);
+                body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
+                body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
+                form.render();
+            }
+            setTimeout(function(){
+                layui.layer.tips('点击此处返回${object.name}列表', '.layui-layer-setwin .layui-layer-close', {
+                    tips: 3
+                });
+            },500)
+        }
+    })
+    layui.layer.full(index);
+    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+    $(window).on("resize",function(){
+        layui.layer.full(index);
+    })
+}
+
+$(".passign").click(function(){
+	// ------------------------------级联
+	var table = layui.table;
+	var checkStatus = table.checkStatus('gridTable')
+    ,data = checkStatus.data;
+	if(data.length != 1){
+		//layer.alert(JSON.stringify(data));
+		
+		layer.msg('选中了：'+ data.length + ' 个');
+	}else{
+		passign(null,data);
+		
+	}
+})
+});
+
+
+</script>

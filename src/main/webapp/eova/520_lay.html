@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>520-${APP.name}</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="${STATIC!}/ui2/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="${STATIC!}/ui2/css/public.css" media="all" />
+	<script type="text/javascript" src="${STATIC!}/ui2/layui/layui.js"></script>
+</head>
+<body class="childrenBody">
+	
+	<div class="layui-row layui-col-space10">
+		<div class="layui-col-md12">
+			<blockquote class="layui-elem-quote">
+				如果您不幸看到了本页面,说明您被坑了,为少走弯路而看文档! >> <a href="http://note.youdao.com/noteshare?id=e01e527d8e59ec4e5608a87fdf61332e" target="_blank">简单部署笔记</a>
+			</blockquote>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+			
+正确的启动方法：
+1、com.RunEovaOSS 运行main
+2、pom.xml 右键run-as：  maven-install，将打包好的war文件部署在tomcat root下
+
+PS:建议使用80端口(其它端口也可以)，不建议用localhost访问
+
+我们为什么这样做?基于简单的原则：
+积木为了简单方便的解决路径问题，直接从根目录开始计算路径，没有繁琐的在各处都添加（项目名+端口）。
+如果有同学想同时运行多个工程，可以使用多个端口号起服务即可。
+正式环境一般都是这么玩的，JFinal也是这么玩的，如果有不得已的原因需要带项目名，请手工修改之。
+
+友情提示：
+JFinal快速开发平台积木群:818129789
+			
+			</blockquote>
+			
+			
+		</div>
+
+		
+		
+</div>
+	
+</body>
+</html>

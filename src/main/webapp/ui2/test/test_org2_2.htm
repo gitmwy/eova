@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+  <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
+  <title>CodePen - 2016 NBA Playoff Picture </title>
+  
+  
+  
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.3/css/jquery.orgchart.min.css'>
+ <link rel="stylesheet" href="/ui2/src/css/layui.css" media="all" />
+      <style>
+      body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #333333;
+}
+
+#github-link {
+  position: fixed;
+  top: 0px;
+  left: calc(50% - 18px);
+  font-size: 42px;
+  color: #000;
+}
+
+.chart-container {
+  
+
+
+}
+
+.orgchart {
+  background: #fff;
+  border: 0;
+  padding: 0;
+  width:100%;
+}
+
+.orgchart>.spinner {
+  color: rgba(255, 255, 0, 0.75);
+}
+
+.orgchart .node .title {
+  background-color: #fff;
+  color: #000;
+  height: 120px;
+  border-radius: 0;
+}
+
+.orgchart.r2l .node .title {
+  transform: rotate(-90deg) translate(60px, 60px);
+  -ms-transform: rotate(-90deg) translate(60px, 60px);
+  -moz-transform: rotate(-90deg) translate(60px, 60px);
+  -webkit-transform: rotate(-90deg) translate(60px, 60px);
+}
+
+.orgchart.l2r .node .title {
+  transform: rotate(-90deg) translate(60px, 60px) rotateY(180deg);
+  -ms-transform: rotate(-90deg) translate(60px, 60px) rotateY(180deg);
+  -moz-transform: rotate(-90deg) translate(60px, 60px) rotateY(180deg);
+  -webkit-transform: rotate(-90deg) translate(60px, 60px) rotateY(180deg);
+}
+
+.orgchart .node .content {
+  border: 0;
+  background-color: #b80036;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.orgchart.r2l .node .content,
+.orgchart.l2r .node .content {
+  position: absolute;
+  bottom: 138px;
+  right: 78px;
+  width: 20px;
+  border-radius: 0px;
+}
+
+.orgchart .node>.spinner {
+  color: rgba(184, 0, 54, 0.75);
+}
+
+.orgchart.r2l .node,
+.orgchart.l2r .node {
+  width: 130px;
+}
+
+.orgchart .node:hover {
+  background-color: rgba(255, 255, 0, 0.6);
+}
+
+.orgchart .node.focused {
+  background-color: rgba(255, 255, 0, 0.6);
+}
+
+.orgchart .node .edge {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.orgchart .edge:hover {
+  color: #000;
+}
+
+.orgchart td.left,
+.orgchart td.top,
+.orgchart td.right {
+  border-color: #999;
+}
+
+.orgchart td>.down {
+  background-color: #999;
+}
+    </style>
+
+
+  
+  
+
+
+<script type="text/javascript" src="/ui2/src/layui.js"></script>
+</head>
+
+<body translate="no" >
+
+<!--  按钮们 -->
+<div class="layui-btn-group">
+	  <button class="layui-btn layui-btn-sm"  title="添加">
+	    <i class="layui-icon"  >&#xe654;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="修改">
+	    <i class="layui-icon">&#xe642;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="删除">
+	    <i class="layui-icon">&#xe640;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="查看">
+	    <i class="layui-icon">&#xe60b;</i>
+	  </button>  
+	</div>
+
+  <div id="chart-western"  ></div>
+<div id="chart-eastern" class="chart-container" style="text-align: left;"></div>
+
+<a id="github-link" href="https://github.com/dabeng/OrgChart" target="_blank"><i class="fa fa-github-square"></i></a>
+    <script src="//static.codepen.io/assets/common/stopExecutionOnTimeout-41c52890748cd7143004e05d3c5f786c66b19939c4500ce446314d1748483e13.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/orgchart/2.1.3/js/jquery.orgchart.min.js'></script>
+
+  
+
+    <script >
+      (function ($) {
+  $(function () {
+    var westData = {
+      'name': 'warriors',
+      'wins': '3',
+      'children': [
+      { 'name': 'warriors', 'wins': '4',
+        'children': [
+        { 'name': 'warriors', 'wins': '4',
+          'children': [
+          { 'name': 'warriors', 'wins': '4' },
+          { 'name': 'rockets', 'wins': '1' }] },
+
+
+        { 'name': 'blazers', 'wins': '1',
+          'children': [
+          { 'name': 'clippers', 'wins': '2' },
+          { 'name': 'blazers', 'wins': '4' }] }] },
+
+
+
+
+      { 'name': 'thunders', 'wins': '3',
+        'children': [
+        { 'name': 'spurs', 'wins': '2',
+          'children': [
+          { 'name': 'spurs', 'wins': '4' },
+          { 'name': 'grizzlies', 'wins': '0' }] },
+
+
+        { 'name': 'thunders', 'wins': '4',
+          'children': [
+          { 'name': 'thunders', 'wins': '4' },
+          { 'name': 'mavericks', 'wins': '1' }] }] }] };
+
+
+
+
+
+
+
+    var ocWest = $('#chart-western').orgchart({
+      'data': westData,
+      'nodeContent': 'wins',
+      //'direction': 'r2l',
+      'createNode': function createNode($node, data) {
+        $node.children('.title').html('<img src="https://dabeng.github.io/OrgChart/img/2016nba/' + data.name + '.jpg" widht="100%" height="100%">');
+      } });
+
+
+    var eastData = {
+      'name': 'cavaliers',
+      'wins': '4',
+      'children': [
+      { 'name': 'cavaliers', 'wins': '4',
+        'children': [
+        { 'name': 'cavaliers', 'wins': '4',
+          'children': [
+          { 'name': 'cavaliers', 'wins': '4' },
+          { 'name': 'pistons', 'wins': '0' }] },
+
+
+        { 'name': 'hawks', 'wins': '2',
+          'children': [
+          { 'name': 'hawks', 'wins': '4' },
+          { 'name': 'celtics', 'wins': '2' }] }] },
+
+
+
+
+      { 'name': 'raptors', 'wins': '2',
+        'children': [
+        { 'name': 'raptors', 'wins': '4',
+          'children': [
+          { 'name': 'raptors', 'wins': '4' },
+          { 'name': 'pacers', 'wins': '3' }] },
+
+
+        { 'name': 'heat', 'wins': '3',
+          'children': [
+          { 'name': 'heat', 'wins': '4' },
+          { 'name': 'hornets', 'wins': '3' }] }] }] };
+
+
+
+
+
+
+
+ /*    var ocEast = $('#chart-eastern').orgchart({
+      'data': eastData,
+      'nodeContent': 'wins',
+      'direction': 'l2r',
+      'createNode': function createNode($node, data) {
+        $node.children('.title').html('<img src="https://dabeng.github.io/OrgChart/img/2016nba/' + data.name + '.jpg" widht="100%" height="100%">');
+      } }); */
+
+
+  });
+})(jQuery);
+      //# sourceURL=pen.js
+    </script>
+
+
+
+  
+  
+
+</body>
+
+</html>
+ 

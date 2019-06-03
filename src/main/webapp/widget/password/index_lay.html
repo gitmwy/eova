@@ -1,0 +1,13 @@
+<%
+var verify = "";
+if(isTrue(isNoN!) ){
+	verify = verify + "required";
+}
+if(!isEmpty(validator!)){
+	if(isEmpty(verify))
+		verify = validator;
+	else
+		verify = verify + "|" +validator;
+}
+%>
+<input type="password" id="${name}" name="${name}" value="${value!item.defaulter}" lay-verify="${verify!}" placeholder="请输入密码" autocomplete="off" class="layui-input">

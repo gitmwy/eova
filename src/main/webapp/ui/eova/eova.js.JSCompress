@@ -1,0 +1,17 @@
+﻿<jscompress public="http://www.jscompress.cn/" command="import-combineset">
+<combinefile path="eova.js">
+    <auto value="1" />
+    <sourcefile path=".\src\eova.common.js" />
+    <sourcefile path=".\src\eova.widget.js" />
+    <sourcefile path=".\src\eova.text.js" />
+    <sourcefile path=".\src\eova.auto.js" />
+    <sourcefile path=".\src\eova.bool.js" />
+    <sourcefile path=".\src\eova.time.js" />
+    <sourcefile path=".\src\eova.check.js" />
+    <sourcefile path=".\src\eova.combo.js" />
+    <sourcefile path=".\src\eova.find.js" />
+    <sourcefile path=".\src\eova.cloud.js" />
+    <sourcefile path=".\src\eova.icon.js" />
+    <sourcefile path=".\src\eova.info.js" />
+</combinefile>
+</jscompress>

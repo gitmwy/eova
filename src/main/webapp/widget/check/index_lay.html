@@ -1,0 +1,88 @@
+<%
+
+var readonly= false;
+if(isTrue(isReadonly!) ||isTrue(view!)){
+	readonly = true;
+}
+
+
+%>
+<!-- 审核模块需要用到 -->
+<div id="mycheck_${field.en}">
+      <input type="hidden" name="${name}" id="${name}" value="${value!field.defaulter}">
+
+       <!-- <input type="radio" name="sex" value="男" title="男" checked="">
+      <input type="radio" name="sex" value="女" title="女">
+      <input type="radio" name="sex" value="禁" title="禁用" disabled="">  -->
+
+</div>
+<script>
+// JS 可以干预控件所在页面的任何效果
+
+
+$(function(){
+
+	var idName = "mycheck_${field.en}";
+	var $checks = $('#' + idName);
+	var $checkValue = $checks.find("input:hidden");
+	
+	var readonly = ${readonly};
+	
+	// 加载数据(复选框其实和下拉一样，只是展现方式不一样，所以直接用下拉的API获取数据)
+	var url = "/widget/comboJson/${field.object_code}-${field.en}";
+	$.ajax({
+        type: 'get',
+        async: true,
+        url: url,
+        dataType: "json",
+        success: function (json) {
+        	
+        	// 生成复选框Dom
+            $.each(json, function (index, o) {
+            	$('<input type="radio" name="${name}_radio" lay-filter="${name}_radio" value="'+o.id+'" title="'+o.cn+'" >').appendTo($checks);
+                //$("<label><input type=\"radio\" value=\"" + o.id + "\">" + o.cn + "&nbsp;</label>").appendTo($checks);
+            });
+        	// 初始化选中
+        	var vals = $checkValue.val().split(",");
+        	
+        	$checks.find('input:radio').each(function(i, o){
+        		console.log($(o).val());
+        		
+        		if(readonly){
+        			o.disabled = true;
+        		}
+        		
+        		
+        		if($checkValue.val() == $(o).val()){
+        			o.checked = true;
+        			//审核界面才需此效果
+        			if(PAGE_TYPE == "examine" || PAGE_TYPE == "shenhe")
+    					o.disabled = true;
+        			
+        		}
+        		
+        	});
+        	
+           
+         // 绑定radio事件
+            layui.use(['form'], function(){
+            	var form = layui.form;
+            	form.on('radio(${name}_radio)', function(data){
+              	  //console.log(data.elem); //得到radio原始DOM对象
+              	  //console.log(data.value); //被点击的radio的value值
+              		$checkValue.val(data.value);
+              	}); 
+            });
+            
+            renderForm();
+             
+        },
+        error: function () {
+            alert('复选框加载数据失败,URL=' + url);
+        }
+    });
+
+
+
+});
+</script>

@@ -1,0 +1,50 @@
+<button class="layui-btn layui-btn-sm ${ZN2Pinyin(button.name!)}${object.code}"  title="${button.name}"   >
+	    <i class="layui-icon"  >${button.icon!'&#xe601;'}</i>
+</button>
+<script type="text/javascript">
+//搜索【此功能需要后台配合，所以暂时没有动态效果演示】
+//注意 layui 的 table.js被调整 table.reload 方法增加重置  config.where = {};
+$(".${ZN2Pinyin(button.name!)}${object.code}").on("click",function(){
+	${ZN2Pinyin(button.name!)}${object.code}();
+});
+
+
+function ${ZN2Pinyin(button.name!)}${object.code}(gridId){
+	var id = '${gridId!}';
+	if(gridId != null){
+		id = gridId;
+	}
+	
+		var formvalues = $.getFormParasObj($('#${queryId!}'));
+		
+		var url = $("#"+id).attr("url");
+		url = "/grid/export/${object.code}";
+		if(url == null && url == '')
+			return;
+		
+		//console.log(JSON.stringify(formvalues));
+		//console.log(formvalues);
+		
+		
+		var addParam = '';
+		 $.each(formvalues, function(k, v){
+		        if(addParam.length == 0){
+		        	addParam = k+'='+v;
+		        }else{
+		        	addParam += '&'+k+'='+v;
+		        }
+		    });
+		
+		if(url.indexOf('?')  == -1){
+				url = url +"?"+addParam;
+		}else{
+			url = url +"&"+addParam;
+		}
+		
+		window.open(url);
+}
+
+
+
+
+</script>

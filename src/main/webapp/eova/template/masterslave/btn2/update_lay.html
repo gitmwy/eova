@@ -1,0 +1,70 @@
+<button class="layui-btn layui-btn-sm update${object.code}" title="修改">
+	    <i class="layui-icon">&#xe642;</i>
+</button>
+<script type="text/javascript">
+$(function () {
+//编辑
+function update(edit,data){
+	var ref = '';
+	var parent = $('#${parentId!}');
+   	// 主对象关联字段
+    var objectField = '${config.objectField!}';
+    // 子对象关联字段
+    var field = '${field!}';
+	if(parent && objectField != '' && field != ''){
+		// 从父组件上获取选中外键值
+
+		ref = "ref=" + field + ":" + lineId;
+	}
+	
+    	var index = layui.layer.open({
+        title : "修改${object.name}",
+        type : 2,
+        content : '/form/update/${object.code}-' + data[0].pk_id+'?template=lay'+"&"+ref,
+        success : function(layero, index){
+            var body = layui.layer.getChildFrame('body', index);
+            if(edit){
+                body.find(".newsName").val(edit.newsName);
+                body.find(".abstract").val(edit.abstract);
+                body.find(".thumbImg").attr("src",edit.newsImg);
+                body.find("#news_content").val(edit.content);
+                body.find(".newsStatus select").val(edit.newsStatus);
+                body.find(".openness input[name='openness'][title='"+edit.newsLook+"']").prop("checked","checked");
+                body.find(".newsTop input[name='newsTop']").prop("checked",edit.newsTop);
+                form.render();
+            }
+            setTimeout(function(){
+                layui.layer.tips('点击此处返回${object.name}列表', '.layui-layer-setwin .layui-layer-close', {
+                    tips: 3
+                });
+            },500)
+        }
+    })
+    layui.layer.full(index);
+    //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+    $(window).on("resize",function(){
+        layui.layer.full(index);
+    })
+}
+
+$(".update${object.code}").click(function(){
+	var table = layui.table;
+	var checkStatus = table.checkStatus('${gridId!}Table')
+    ,data = checkStatus.data;
+	if(data.length != 1){
+		//layer.alert(JSON.stringify(data));
+		
+		layer.msg('选中了：'+ data.length + ' 个');
+	}else{
+		
+		
+		update(null,data);
+		
+	}
+	
+		
+
+})
+
+});
+</script>

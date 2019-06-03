@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Organization Chart Plugin</title>
+  <link rel="icon" href="OrgChart/img/logo.png">
+  <link rel="stylesheet" href="OrgChart/css/font-awesome.min.css">
+  <link rel="stylesheet" href="OrgChart/css/jquery.orgchart.css">
+
+  
+  <link rel="stylesheet" href="/ui2/src/css/layui.css" media="all" />
+  
+  
+ <style type="text/css">
+    .orgchart .second-menu-icon {
+      transition: opacity .5s;
+      opacity: 0;
+      right: -5px;
+      top: -5px;
+      z-index: 2;
+      color: rgba(68, 157, 68, 0.5);
+      font-size: 18px;
+      position: absolute;
+    }
+    
+    .orgchart .second-menu-icon2 {
+      transition: opacity .5s;
+      opacity: 0;
+      right: -5px;
+      top: -5px;
+      z-index: 2;
+      color: rgba(68, 157, 68, 0.5);
+      font-size: 18px;
+      position: absolute;
+    }
+    
+    .orgchart .second-menu-icon:hover { color: #449d44; }
+    .orgchart .node:hover .second-menu-icon { opacity: 1; }
+    .orgchart .node .second-menu {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: -70px;
+      border-radius: 35px;
+      box-shadow: 0 0 10px 1px #999;
+      background-color: #fff;
+      z-index: 1;
+    }
+    .orgchart .node .second-menu .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      float: left;
+      margin: 5px;
+    }
+  </style>
+   <style type="text/css">
+
+    .orgchart { background: #fff; }
+    .orgchart.edit-state .edge { display: none; }
+    .orgchart .node { width: 150px; }
+    .orgchart .node .title { height: 30px; line-height: 30px; }
+    .orgchart .node .title .symbol { margin-top: 1px; }
+    .orgchart {
+  background: #fff;
+  border: 0;
+  padding: 0;
+  width:100%;
+}
+    
+    #edit-panel {
+      position: relative;
+      left: 10px;
+      width: calc(100% - 40px);
+      border-radius: 4px;
+      float: left;
+      margin-top: 10px;
+      padding: 10px;
+      color: #fff;
+      background-color: #449d44;
+    }
+    #edit-panel .btn-inputs { font-size: 24px; }
+    #edit-panel.edit-state>:not(#chart-state-panel) { display: none; }
+    #edit-panel label { font-weight: bold; }
+    #edit-panel.edit-parent-node .selected-node-group { display: none; }
+    #chart-state-panel, #selected-node, #btn-remove-input { margin-right: 20px; }
+    #edit-panel button {
+      color: #333;
+      background-color: #fff;
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #edit-panel.edit-parent-node button:not(#btn-add-nodes) { display: none; }
+    #edit-panel button:hover,.edit-panel button:focus,.edit-panel button:active {
+      border-color: #eea236;
+      box-shadow:  0 0 10px #eea236;
+    }
+    #new-nodelist {
+      display: inline-block;
+      list-style:none;
+      margin-top: -2px;
+      padding: 0;
+      vertical-align: text-top;
+    }
+    #new-nodelist>* { padding-bottom: 4px; }
+    .btn-inputs { vertical-align: sub; }
+    #edit-panel.edit-parent-node .btn-inputs { display: none; }
+    .btn-inputs:hover { text-shadow: 0 0 4px #fff; }
+    .radio-panel input[type='radio'] { display: inline-block;height: 24px;width: 24px;vertical-align: top; }
+    #edit-panel.view-state .radio-panel input[type='radio']+label { vertical-align: -webkit-baseline-middle; }
+    #btn-add-nodes { margin-left: 20px; }
+  </style>
+  
+  <script type="text/javascript" src="/ui/js/jquery.min.js"></script>
+  <script type="text/javascript" src="OrgChart/js/jquery.orgchart.js"></script>
+  <script type="text/javascript" src="/ui2/src/layui.js"></script>
+</head>
+<body>
+<br><br><br>
+<!--  按钮们 -->
+<div class="layui-btn-group">
+	  <button class="layui-btn layui-btn-sm"  title="添加">
+	    <i class="layui-icon"  >&#xe654;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="修改">
+	    <i class="layui-icon">&#xe642;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="删除">
+	    <i class="layui-icon">&#xe640;</i>
+	  </button>
+	  <button class="layui-btn layui-btn-sm" title="查看">
+	    <i class="layui-icon">&#xe60b;</i>
+	  </button>  
+	</div>
+
+
+  <div id="mychart-container"></div>
+  
+  
+<div> <label class="selected-node-group">选中节点:</label>
+<input type="text" id="selected-node" class="selected-node-group"></div>
+
+    
+
+  
+   <script type="text/javascript">
+    $(function() {
+
+    	var datascource = {
+    		      'id': '1',
+    		      'name': 'Lao Lao',
+    		      'title': 'general manager',
+    		      'city':'北京',
+    		      'children': [
+    		        { 'id': '2', 'name': 'Bo Miao', 'title': 'department_A', 'city':'东京'},
+    		        { 'id': '3', 'name': 'Su Miao', 'title': 'department_B', 'city':'东京',
+    		          'children': [
+    		            { 'id': '4', 'name': 'Tie Hua', 'title': 'senior_C' , 'city':'东京'},
+    		            { 'id': '5', 'name': 'Hei Hei', 'title': 'senior_D', 'city':'东京',
+    		              'children': [
+    		                { 'id': '6', 'name': 'Pang Pang', 'title': 'engineer_E' , 'city':'东京'},
+    		                { 'id': '7', 'name': 'Xiang Xiang', 'title': 'engineer_F', 'city':'东京' }
+    		              ]
+    		            }
+    		          ]
+    		        },
+    		        { 'id': '8', 'name': 'Yu Jie', 'title': 'department_F', 'city':'南京' },
+    		        { 'id': '9', 'name': 'Yu Li', 'title': 'department_H', 'city':'南京' },
+    		        { 'id': '10', 'name': 'Hong Miao', 'title': 'department_I' , 'city':'南京'},
+    		        { 'id': '11', 'name': 'Yu Wei', 'title': 'department_J' , 'city':'南京'},
+    		        { 'id': '12', 'name': 'Chun Miao', 'title': 'department_K', 'city':'南京' },
+    		        { 'id': '13', 'name': 'Yu Tie', 'title': 'department_L' , 'city':'南京'}
+    		      ]
+    		    };
+
+    var nodeTemplate = function(data) {
+      return `
+        <span class="office">${data.city}</span>
+        <div class="title">${data.name}</div>
+        <div class="content">${data.title}</div>
+      `;
+    };
+
+    var getId = function() {
+        return (new Date().getTime()) * 1000 + Math.floor(Math.random() * 1001);
+      };
+    
+      var oc =   $('#mychart-container').orgchart({
+        'data' : datascource,
+     //   'visibleLevel': 2,
+        'nodeTemplate': nodeTemplate,
+        'nodeID': 'id',
+        
+        'chartClass': 'edit-state',
+
+        'exportFilename': 'SportsChart',
+        'parentNodeSymbol': 'fa-th-large',
+        
+        'createNode': function($node, data) {
+        	//增加权限按钮（估计还是在第一排加权限按钮）
+          var secondMenuIcon = $('<i>', {
+            'class': 'fa fa-info-circle second-menu-icon',
+            click: function() {
+              $(this).siblings('.second-menu').toggle();
+            }
+          });
+        	
+         /*  var secondMenuIcon2 = $('<i>', {
+              'class': 'fa fa-question-circle second-menu2-icon',
+              click: function() {
+                $(this).siblings('.second-menu2').toggle();
+              }
+            }); */
+        	
+          //var secondMenu = '<div class="second-menu"><img class="avatar" src="OrgChart/img/avatar/' + data.id + '.jpg"></div>';
+          
+          var secondMenu = '<div class="second-menu"><button class="layui-btn layui-btn-sm aaaa" title="新增"><i class="layui-icon">&#xe654;</i></button></div>';
+          $node.append(secondMenuIcon).append(secondMenu);
+         /// var secondMenu2 = '<div class="second-menu"><img class="avatar" src="OrgChart/img/avatar/' + data.id + '.jpg"></div>';
+          //$node.append(secondMenuIcon2).append(secondMenu2);
+        }
+      });
+    
+    oc.$chartContainer.on('click', '.node', function() {
+        var $this = $(this);
+        var aa = $this.attr("id");
+        $('#selected-node').val($this.find('.title').text());//.data('node', $this);
+      });
+
+      oc.$chartContainer.on('click', '.orgchart', function(event) {
+        if (!$(event.target).closest('.node').length) {
+          $('#selected-node').val('');
+        }
+      });
+    
+    //移动代码
+    /* oc.$chart.on('nodedrop.orgchart', function(event, extraParams) {
+        console.log('draggedNode:' + extraParams.draggedNode.children('.title').text()
+          + ', dragZone:' + extraParams.dragZone.children('.title').text()
+          + ', dropZone:' + extraParams.dropZone.children('.title').text()
+        );
+      }); */
+
+
+
+  });
+  </script>
+  </body>
+</html>

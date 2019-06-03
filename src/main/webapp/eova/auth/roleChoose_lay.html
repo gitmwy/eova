@@ -1,0 +1,321 @@
+<%layout("/eova/layout/default_lay.html",{'title' : 'CRUD'}){%>
+<script type="text/javascript" src="${STATIC!}/ui/js/template.js"></script>
+
+
+<body class="childrenBody">
+	<form class="layui-form" action="">
+
+		<div class="layui-fluid">
+			<div class="layui-row layui-col-space10">
+
+				<div class="layui-col-md2" title="自动继承选择角色的权限到当前角色(复制权限数据)">
+					<label>继承角色 </label>
+				</div>
+				<div class="layui-col-md8">
+					<div class="layui-btn-group">
+						<!-- 			      <input type="checkbox" name="like[read]" lay-skin="primary"  title="阅读" checked> -->
+
+
+						<%for(x in roles){%> 
+						<input type="checkbox" lay-filter='extends'  name="extends" value="${x.id}" lay-skin="primary" title="${x.name}">
+						<%}%>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<br>
+		<!-- 	功能按钮 -->
+		<div class="layui-btn-group">
+			<button class="layui-btn choiceall">全选</button>
+			<button class="layui-btn cancelall">取消</button>
+
+			<!-- 	  <button class="layui-btn cancelall">选择全部查询</button> -->
+			<!-- 	  <button class="layui-btn cancelall">选择全部新增</button> -->
+			<!-- 	  <button class="layui-btn cancelall">选择全部修改</button> -->
+			<!-- 	  <button class="layui-btn cancelall">选择全部查看</button> -->
+			<!-- 	  <button class="layui-btn cancelall">选择全部导入</button> -->
+			<!-- 	  <button class="layui-btn cancelall">选择全部导出</button> -->
+			<!-- 	  <button class="layui-btn layui-btn-sm" title="删除"> -->
+			<!-- 	    <i class="layui-icon">&#xe640;</i> -->
+			<!-- 	  </button> -->
+
+
+
+
+
+		</div>
+</form>
+		<!-- 	<table id="dataList" lay-filter="dataList"></table> -->
+		<table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
+
+
+	
+	<!-- <script type="text/javascript" src="../../ui2/js/dataList.js"></script> -->
+</body>
+
+
+<script type="text/html" id="iconclsTpl">
+<i class="layui-icon">{{d.iconcls}}</i>   
+</script>
+
+<script type="text/html" id="rpTpl">
+{{#  if(d.btnid != null){ }}
+
+{{#  layui.each(d.btnid.split(','), function(index, item){ }}
+<input  type="checkbox" lay-filter="ids{{d.id}}" name="funBtn" value="{{ item }}" id="{{ item }}" lay-skin="primary" title="{{ d.btnname.split(',')[index] }}">
+{{#  }); }}
+
+{{#  } }} 
+</script>
+
+
+<script>
+var form = null;
+var layer = null;
+
+		layui.use([ 'form', 'table', 'layer', 'treeGrid' ],
+						function() {
+							var table = layui.table;
+							layer = layui.layer;
+							form = layui.form;
+							var $ = layui.jquery;
+
+							var treeGrid = layui.treeGrid; //很重要
+							var treeTable = treeGrid
+									.render({
+										elem : '#treeTable',
+										url : '/auth/getFunJson',
+										cellMinWidth : 300
+										,treeId : 'id'//树形id字段名称	
+										,treeUpId : 'parent_id'//树形父id字段名称
+										,treeShowName : 'name'//以树形式显示的字段
+										,page: false//好像参数不管用
+										,cols : [ [
+										//{checkbox: true},
+										{field:'id',title:'ID' ,width : '60', display:'none'},
+										{
+											field : 'name',
+											width : '200',
+											title : '水果'
+										},{
+											field : 'iconcls',//iconCls || iconskip
+											width : '60',
+											title : '图标',
+											align: 'center',
+											templet: '#iconclsTpl'
+												
+										}, {
+											field : 'rp',
+											
+											title : '功能(双击单元格，全选/反选所有功能) ',
+											templet: '#rpTpl'
+										} ] ],
+										response: {
+							       
+												statusName: 'status' 
+									          	,statusCode: 200 //成功的状态码，默认：0
+							           
+							            	},
+										page : false,
+										done : function(res, curr, count) {// 表格渲染完成之后的回调
+											//添加隐藏字段
+											
+											
+											LayUIDataTable.SetJqueryObj($);// 第一步：设置jQuery对象
+											
+											var currentRowDataList = LayUIDataTable.ParseDataTable(function(index, currentData,rowData,clicktype) {
+												//console.log("当前行索引："+ index+":"+clicktype);
+												//console.log(currentData);
+												//console.log(rowData);
+												
+												
+														$.each(currentRowDataList,function(i,obj) {//当前设置颜色，其他的取消
+																	 
+																if(clicktype == 'click'){//颜色
+																	if (i == index)
+																		obj['name']["row"].css("background-color","#ffe48d");
+
+																	else {
+																		obj['name']["row"].css("background-color","");
+																	}
+																}else if(clicktype == 'dblclick'){//双击选中/取消本行数据
+																	if (i == index){
+																		var id = $(rowData.id).text().trim();
+																		//lay-filter="ids{{d.id}}"
+																		//console.log("id==="+id);
+																		var groupCheckbox = $("input[lay-filter='ids"+id+"']");
+																		console.log(groupCheckbox);
+																		if(groupCheckbox.length>0){
+																			var checked = groupCheckbox[0].checked;
+																			//console.log("checked==="+checked);
+																			for(x=0;x<groupCheckbox.length;x++){
+																				groupCheckbox[x].checked=!checked;
+																		  	}
+																			form.render();	
+																		}
+																	}
+																	
+																}
+																	
+														});
+											});
+											
+											chooseFun(${rid});
+										}// end done
+										
+							           //
+									});//end table.render
+									
+							form.on('checkbox(extends)', function(data){
+								  //console.log(data.elem); //得到checkbox原始DOM对象
+								 // console.log(data.elem.checked); //是否被选中，true或者false
+								  //console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+								  //console.log(data); //得到美化后的DOM对象
+								  //console.log(data.elem.name);
+								  var checked = data.elem.checked;
+								  chooseFun(data.value,checked);
+								}); 
+									
+									
+						
+		
+		  });// end layui use
+		
+									      
+    $(".choiceall").click(function(){
+    	var isCheck = true;
+    	var groupCheckbox = $("input[name='funBtn']");
+		for (i = 0; i < groupCheckbox.length; i++) {
+		      var val = groupCheckbox[i].value;
+		      if(isCheck)
+		    		groupCheckbox[i].checked=true;
+		      else
+		    		groupCheckbox[i].checked=false; 	    
+		}
+    	form.render();	
+    	return false;
+	});
+    
+    $(".cancelall").click(function(){
+    	var isCheck = false;
+    	var groupCheckbox = $("input[name='funBtn']");
+		for (i = 0; i < groupCheckbox.length; i++) {
+		      var val = groupCheckbox[i].value;
+		      if(isCheck)
+		    		groupCheckbox[i].checked=true;
+		      else
+		    		groupCheckbox[i].checked=false; 	    
+		}
+    	form.render();	
+    	return false;
+	});
+									
+		// 选中指定角色已授权功能
+		function chooseFun(rid, ck){
+			$.ajax({
+		        url: '/auth/getRoleFunJson/' + rid,
+		        dataType: 'json',
+		        success: function(data) {
+		            // 将返回数据转换为JSON对象
+		        	var list = eval(data);
+		        	var isCheck = true;
+		    		if(ck != null){isCheck = ck;}
+		    		console.log("方式："+isCheck);
+		    		
+		    		//$('#1165').attr("checked","checked");
+		    		
+		    		//$('#1165').checked=true;
+
+		    		var groupCheckbox = $("input[name='funBtn']");
+		    		for (i = 0; i < groupCheckbox.length; i++) {
+		    		      var val = groupCheckbox[i].value;
+		    		    	  for(j = 0; j < list.length; j++){
+		    		    		  if(list[j] == val){
+		    		    			  
+		    		    			  if(isCheck)
+		    		    			  	groupCheckbox[i].checked=true;
+		    		    			  else
+		    		    				  groupCheckbox[i].checked=false;
+		    		    			  break;
+		    		    		  }
+		    		    		  
+		    		    	  }   
+		    		}
+		    		
+		        	/* for(i = 0; i < list.length; i++){
+		        		var bid = list[i];
+		        		//$('#'+ bid).prop('checked', isCheck);
+		        		if(isCheck)
+		        		 	$('#'+ bid).prop("checked",isCheck);
+		        		else
+		        			$('#'+ bid).removeAttr('checked');
+		        	} */
+		        	form.render();
+		        }
+		    });
+		}
+		  
+		// 获取所有选中ID（选中的权限）
+		function getCheckIds(){
+			// 获取选中和不确定节点
+		    var ids = '';
+			//$(".datagrid-row input:checked").each(function() {
+			//	if (ids != '') ids += ',';
+		    //    ids += $(this).val();
+			//});
+			//var ids  = new Array();
+			var groupCheckbox=$("input[name='funBtn']");
+		    var functional="";
+		        for(i=0;i<groupCheckbox.length;i++){
+		            if(groupCheckbox[i].checked){
+		                var val =groupCheckbox[i].value;
+		                //ids.push(val);
+		                if (ids != '') 
+		                	ids += ',';
+				        ids += val;
+		            }
+		        }
+			//console.log(ids);
+		    return ids;
+		}
+
+		// 获取所有选中ID(角色)
+		function getExtendsIds(){
+			// 获取选中和不确定节点
+		    var ids = '';
+			$(".extends input:checked").each(function() {
+				if (ids != '') ids += ',';
+		        ids += $(this).val();
+			});
+		    return ids;
+		}  
+		
+		var btnSaveCallback = function() {
+			var url = "/auth/roleChoose/" + ${rid};
+			//console.log("=====btnSaveCallback");
+			var o ={
+					'checks': getCheckIds()
+			};
+			$.post(url, o, function(result) {
+				if (result.success) {
+					layer.msg("操作成功！");
+
+					
+					var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index);
+					
+					parent.reload();
+				} else {
+					//$pjq.messager.alert('提示', result.msg, 'error');
+					
+					
+					layer.msg(result.msg, {anim:6}); 
+				}
+			}, 'json');
+		};
+
+</script>
+
+<%}%>

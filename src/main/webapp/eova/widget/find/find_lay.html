@@ -1,0 +1,167 @@
+<%layout("/eova/layout/default_lay.html",{'title' :  '查找数据'}){%>
+<body class="childrenBody">
+
+	
+
+		 <#query_lay1_v2 id="queryForm" items="${itemList}" />
+	
+
+
+    <!-- 	功能按钮 -->
+	<div class="layui-btn-group">
+		<%include("/eova/template/common/query_lay.html",{'queryId':'queryForm', 'parentId':'findGridTable'}){}%>
+	</div>
+	<#grid_lay id="findGrid" height="300" objectJson="${objectJson}" fieldsJson="${fieldsJson}" url="${action!}" isPaging="${isPaging!true}"  />
+	
+<script>
+var choiceed = new Array();
+var defaultval = "${parameter.val}";
+//需要控制选中已经选中的数据（）
+function dataDone(res, curr, count,is_single){
+		
+		var tableDiv = $("#findGrid").next();
+		//console.log(res);
+		//alert(res);
+		
+		// 初始值选中
+		
+		var vals = null;
+		if(defaultval && defaultval != ''){
+			vals = defaultval.split(',');
+		}
+		
+		//选中需要选中的
+		for(var index=0;index<res.rows.length;index++){
+			console.log(res.rows[index]);
+			var pk_id = res.rows[index]["pk_id"];
+			
+			if(vals != null){
+				$.each(vals, function(i, val) {
+					if(pk_id == val){
+						var checkCell = null;
+						if(is_single)
+							  checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.laytable-cell-checkbox div.layui-form-radio");
+						else
+							  checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.laytable-cell-checkbox div.layui-form-checkbox I");
+							
+						checkCell.click();
+						return false;					
+					}
+				});
+			}else{
+				//name: "活跃", value:
+				for(var x=0;x<choiceed.length;x++){//根据已存值设置选中
+					if(choiceed[x]["pk_id"] == pk_id){
+						var checkCell = null;
+						if(is_single)
+							  checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.laytable-cell-checkbox div.layui-form-radio");
+						else
+							  checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.laytable-cell-checkbox div.layui-form-checkbox I");
+						checkCell.click();
+						break;
+					}
+				}
+			}
+			
+		}
+		//用完一次，值空
+		defaultval = '';
+}
+
+//回调方案，选中的保存起来
+function checkboxChicked(obj,is_single){
+	var id = obj.data.id;
+	var checked = obj.data.LAY_CHECKED;
+	var pk_id = obj.data["pk_id"];
+	
+	//如果是单选则且是选中，怎删除已有的
+	if(is_single && choiceed.length>0)
+		choiceed.splice(0,choiceed.length);
+	
+	var has = false;
+	var x = 0;
+	for(x=0;x<choiceed.length;x++){
+		if(choiceed[x]["pk_id"] == pk_id){
+			has = true;
+			break;
+		}
+	}
+	
+	if(has){//存在
+		
+		if(!checked){//移除
+			choiceed.splice(x,1);
+		}
+		
+	}else{//不存在
+		if(checked)//+
+			choiceed[choiceed.length] = obj.data;
+			
+	}
+}
+
+var $findGrid = $('#findGrid');
+
+$(function(){
+	//绑定双击事件
+	$findGrid.datagrid({
+		onDblClickRow : function(rowIndex, rowData){
+			// 模拟点击确认
+			parent.$('#find_ok').trigger('click');
+		},
+		onLoadSuccess : function(data){
+			// 初始值选中
+			var val = "${parameter.val}";
+			if(val && val != ''){
+				var vals = val.split(',');
+				$.each(data.rows, function(i, o) {
+					$.each(vals, function(iv, val) {
+						if(o.${pk} == val){
+							$findGrid.datagrid('selectRow', i);							
+						}
+					});
+				});
+			}
+		}
+	});
+});
+
+var object = JSON.parse('${objectJson}');
+var selectData = function($dialog, findBox) {
+
+    var rows = $findGrid.datagrid('getSelections');
+    try{
+    	// 有选中行
+        var oldValue = findBox.$valuebox.val();
+        var newValue = '';
+        if (rows.length != "0") {
+	        var vals = [], txts = [];
+	        for (var i = 0; i < rows.length; i++) { //组成一个字符串，ID主键用逗号隔开
+	        	vals.push(rows[i][object.pk_name]);
+	            txts.push(rows[i][object.cn]);
+	        }
+        	// 获取主键值(第一列)
+            findBox.$valuebox.val(vals.join(','));
+        	// 获取翻译值(第二列)
+            findBox.$textbox.val(txts.join(','));
+            newValue = findBox.$valuebox.val();
+    	} else {
+    		// 没选值，就清空
+            findBox.$valuebox.val("");
+            findBox.$textbox.val("");
+    	}
+        // 值变更回调
+        if (oldValue != newValue) {
+            console.log(oldValue +'|'+newValue);
+            findBox.options.onChange.call(findBox.$dom, oldValue, newValue);
+        }
+    }catch(err){
+    	console.log("查找框validate异常:" + err);
+    }finally{
+    	// 关闭Dialog
+    	$dialog.dialog('destroy');
+    }
+};
+</script>
+</body>
+<%}%>

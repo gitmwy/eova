@@ -1,0 +1,243 @@
+<%layout("/eova/layout/default_lay.html",{'title' : 'Dialog' }){%>
+
+<form class="layui-form layui-form-pane" action="" id="myForm">
+ 
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属菜单编码</label>
+    <div class="layui-input-block">
+      <#text_lay id="menu_code" name="menu_code" value="${menuCode}"  isNoN="true" isReadonly='true' />
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">图标</label>
+    <div class="layui-input-block">
+      <#icon_lay id="icon" name="icon" value=""  />
+    </div>
+     <div class="layui-form-mid layui-word-aux">(人靠衣装马靠鞍，选个图标高大上)</div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"><font size="4" face="arial" color="red">*</font>名称</label>
+    <div class="layui-input-block">
+      <#text_lay id="name" name="name" value=""  /> 
+    </div>
+     <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+  
+  <div class="layui-form-item ">
+    <label class="layui-form-label">按钮UI路径</label>
+    <div class="layui-input-block">
+      <#texts_lay id="ui" name="ui" value="" placeholder="HTML文件路径 例：/order/btn/print.html"  style="width:100%;height:20px;"  />
+    </div>
+     <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+  
+  
+  
+  
+   <div class="layui-form-item ">
+    <label class="layui-form-label ">按钮BS路径</label>
+    <div class="layui-input-block">
+      <#texts_lay id="bs" name="bs" value="${menu.name!}" placeholder="服务端URI 例：\n/order/print;\n/order/print_data;\n推荐输入否则可能权限控制不让过" style="width:100%;height:20px;" />
+    </div>
+     <div class="layui-form-mid layui-word-aux"></div>
+  </div>
+  
+   
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属按钮组号</label>
+    <div class="layui-input-block">
+     <#text_lay id="group_num" name="group_num" value="0" isNoN="true"/> 
+    </div>
+     <div class="layui-form-mid layui-word-aux">(默认即可)</div>
+  </div>
+  
+   <div class="layui-form-item">
+    <label class="layui-form-label">分配给角色</label>
+    <div class="layui-input-block">
+     <#combo_lay id="role" name="role" code="eova_user_code" field="rid" multiple="true" value="1" />
+    </div>
+     <div class="layui-form-mid layui-word-aux">(可多选)</div>
+  </div>
+ 
+  <div class="layui-form-item">
+    <label class="layui-form-label">FORM名字</label>
+    <div class="layui-input-block">
+     <#text_lay id="form_code" name="form_code" value=""  placeholder="请填写元对象编辑的form名，例如：xxForm" />
+    </div>
+     <div class="layui-form-mid layui-word-aux">"立即提交"按钮外用(选填,不填走默认form)</div>
+  </div> 
+ 
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      
+      
+<div class="layui-btn-group">
+      <button class="layui-btn" lay-submit="" lay-filter="demo1">DIY新增</button>
+  <button class="layui-btn add" lay-submit="" lay-filter="add">copy新增</button>
+  <button class="layui-btn edit" lay-submit="" lay-filter="edit">copy编辑</button>
+  <button class="layui-btn detail" lay-submit="" lay-filter="detail">copy详情</button>
+  <!-- 其他类似按钮自己添加。。。 -->
+</div>
+<br><br>
+<div class="layui-btn-group">
+  <button class="layui-btn edit2" lay-submit="" lay-filter="edit_like">新增编辑Form</button>
+  <!-- 其他类似按钮自己添加。。。 -->
+</div>
+
+
+
+
+  </div>
+</form>
+
+<div class="layui-form-mid layui-word-aux"><font size="4" face="arial" color="red">
+2组按钮：<br>
+第一组：生成按钮和页面（供二次开发）（DIY新增只负责录入地址，，页面按钮得用户自行提供）<br>
+第二组：只生成按钮，并借用新增、修改，查看表单，然后自行设计表单（只需图标、名称、FORM名字三个参数即可）
+</font>
+</div>      
+    </div>
+<script type="text/javascript">
+	
+layui.use(['form','code'], function(){
+	  var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+	   $ = layui.$;
+	
+     //form.render();
+
+     form.on('submit(demo1)', function(data){
+		
+    	 var name =  $("#name").val();
+    	 var ui =  $("#ui").val();
+  		 
+    	 if(name ==''){
+    		 layer.msg('名称未填', {icon: 5}, {anim:1});
+    		 return false;;
+    	 }
+    	 if(ui ==''){
+    		 layer.msg('按钮UI路径未填', {icon: 5}, {anim:1});
+    		 return false;
+    	 }
+    	 
+    	// alert('tijiao');
+  		  //提交数据
+  		  submitNow(data);
+  		  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+  		});
+     
+     
+     form.on('submit(add)', function(data){
+
+   	  
+    	 submitQuick('新增');
+    			  //提交数据
+    			  
+    			  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    			
+    	  
+    	}); 
+
+    	form.on('submit(edit)', function(data){
+    		submitQuick('修改');
+    			  
+     		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    	}); 
+    		
+    		
+    	form.on('submit(detail)', function(data){
+    		submitQuick('查看');
+    		  
+    
+    			  //提交数据
+    			  
+    			  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    		
+    	  
+    	}); 
+    	
+    	form.on('submit(edit_like)', function(data){//修改
+    		
+    		 var form_code =  $("#form_code").val();
+
+      		 
+        	 if(form_code ==''){
+        		 layer.msg('FORM名字未填', {icon: 5}, {anim:1});
+        		 return false;;
+        	 }
+        
+    		
+    		submitQuick('修改',0);
+    		  
+    
+    			  //提交数据
+    			  
+    			  return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    		
+    	  
+    	}); 
+	  
+	}); 
+
+
+
+var $form = $('#myForm');
+var submitNow = function(data) {
+	var url = "/button/doQuick";
+
+	
+	$.post(url, $.getFormParasObj($form), function(result) {
+		if (result.success) {
+			layer.msg("添加按钮成功！");
+			
+			var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+			parent.layer.close(index);
+			
+	
+			 
+			parent.refresh();
+		} else {
+			//alert$.alert($pjq, result.msg);
+			
+			//layer.alert("操作失败:"+result.msg);
+			layer.alert(result.msg, {icon: 2});
+		}
+	}, 'json');
+};	
+	
+
+var submitQuick = function(srcName,isNewPage) {//默认新页面
+	var name =  $("#name").val();
+	var form_code =  $("#form_code").val();
+	 if(name ==''){
+
+		 layer.msg('名称未填', {icon: 5}, {anim:1});
+		 return false;;
+	 }
+	 if(isNewPage == null)
+		 isNewPage = 1;
+	
+	 
+	//执行ajax
+	var url = '/button/copyBtn/${menuCode}-${objectCode}?srcName='+srcName+'&newName='+name+'&isNewPage='+isNewPage;
+	$.post(url, $.getFormParasObj($form), function(result) {
+		 if(result.status == 200){
+		 	layer.open({
+		 		  content: "生成文件路径："+result.data
+		 		});     
+		 		  
+		 	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+			parent.layer.close(index);
+			parent.refresh();
+		 }else{
+			 layer.msg("失败："+result.msg); 
+		 }
+	 
+	 });
+}
+
+
+</script>
+
+<%}%>
