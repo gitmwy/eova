@@ -95,8 +95,8 @@ public class IndexController extends Controller {
 		if(("DEV".equalsIgnoreCase(env) || "TEST".equalsIgnoreCase(env) )
 				&& this.getAttr("loginId") == null){
 			
-			setAttr("loginId", "eova");
-			setAttr("loginPwd", "000000");
+			setAttr("loginId", "admin");
+			setAttr("loginPwd", "123456");
 			render("/eova/login.html");
 			
 			

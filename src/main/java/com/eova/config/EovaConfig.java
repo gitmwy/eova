@@ -97,13 +97,13 @@ public class EovaConfig extends JFinalConfig {
 	public static boolean isLowerCase = true;
 
 	/** Eova配置属性 **/
-	protected static Map<String, String> props = new HashMap<String, String>();
+	protected static Map<String, String> props = new HashMap<>();
 	/** 数据源列表 **/
-	protected static Set<String> dataSources = new HashSet<String>();
+	protected static Set<String> dataSources = new HashSet<>();
 	/** Eova表达式集合 **/
-	protected static Map<String, String> exps = new HashMap<String, String>();
+	protected static Map<String, String> exps = new HashMap<>();
 	/** URI授权集合<角色ID,URI> **/
-	protected static Map<Integer, Set<String>> auths = new HashMap<Integer, Set<String>>();
+	protected static Map<Integer, Set<String>> auths = new HashMap<>();
 
 	private long startTime = 0;
 
@@ -129,17 +129,16 @@ public class EovaConfig extends JFinalConfig {
 	@Override
 	public void afterJFinalStart() {
 		System.err.println("JFinal Started\n");
-		// Load Cost Time
 		xx.costTime(startTime);
 
 		{
-			Boolean isInit = xx.getConfigBool("initPlugins", true);
+			boolean isInit = xx.getConfigBool("initPlugins", true);
 			if (isInit) {
 				EovaInit.initPlugins();
 			}
 		}
 		{
-			Boolean isInit = xx.getConfigBool("initSql", false);
+			boolean isInit = xx.getConfigBool("initSql", false);
 			if (isInit && EOVA_DBTYPE.equals(JdbcUtils.MYSQL)) {
 				EovaInit.initCreateSql();
 			}
@@ -165,9 +164,6 @@ public class EovaConfig extends JFinalConfig {
 		// 初始化配置
 		EovaInit.initConfig(props);
 		
-		
-		
-		//boolean devMode = xx.getConfigBool("devMode", true);
 		String env = EovaConfig.getProps().get("env");
 		if("DEV".equalsIgnoreCase(env) || "TEST".equalsIgnoreCase(env)  ){
 			// 开发模式
@@ -177,18 +173,12 @@ public class EovaConfig extends JFinalConfig {
 			me.setDevMode(false);
 			EovaConfig.getProps().put("isCaptcha", "true");
 		}
-		
-		
-		
+
 		// 设置主视图为Beetl
 		me.setMainRenderFactory(new BeetlRenderFactory());
 		// POST内容最大500M(安装包上传)
 		me.setMaxPostSize(1024 * 1024 * 500);
-		
-		//me.setUrlParaSeparator("&");
-	
-		
-		
+
 		me.setError500View("/eova/500_lay.html");
 		me.setError404View("/eova/404_lay.html");
 
@@ -215,15 +205,15 @@ public class EovaConfig extends JFinalConfig {
 			sharedVars.put("IMG", IMG);
 		if (!xx.isEmpty(FILE))
 			sharedVars.put("FILE", FILE);
-		
-		
+
+
 		sharedVars.put("UPLOAD_IMG_SIZE", EovaConst.UPLOAD_IMG_SIZE);
 		sharedVars.put("UPLOAD_FILE_SIZE", EovaConst.UPLOAD_FILE_SIZE);
 		
 		sharedVars.put("UPLOAD_IMG_TYPE", FileUtil.IMG_TYPE );
 		sharedVars.put("UPLOAD_FILE_TYPE", FileUtil.ALL_TYPE );
-		
-		
+
+
 		sharedVars.put("APP", AuthCloud.getEovaApp());
 
 		// Load Template Const
@@ -503,7 +493,7 @@ public class EovaConfig extends JFinalConfig {
 	protected DruidPlugin initDruidPlugin(String url, String username, String password) {
 		// 设置方言
 		WallFilter wall = new WallFilter();
-		String dbType = null;
+		String dbType;
 		try {
 			dbType = JdbcUtils.getDbType(url, JdbcUtils.getDriverClassName(url));
 		} catch (SQLException e) {

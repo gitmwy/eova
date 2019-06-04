@@ -1,8 +1,6 @@
 package com;
 
-import com.eova.common.Response;
 import com.jfinal.core.JFinal;
-
 
 /**
  * 鼠标右键->Run As Java Application
