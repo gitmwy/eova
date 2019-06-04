@@ -6,26 +6,13 @@
  */
 package com.eova.config;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.beetl.core.GroupTemplate;
-import org.beetl.ext.jfinal.BeetlRenderFactory;
-
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.eova.cloud.AuthCloud;
 import com.eova.common.plugin.quartz.QuartzPlugin;
-import com.eova.common.utils.xx;
 import com.eova.common.utils.io.FileUtil;
+import com.eova.common.utils.xx;
 import com.eova.core.IndexController;
 import com.eova.core.auth.AuthController;
 import com.eova.core.button.ButtonController;
@@ -35,9 +22,7 @@ import com.eova.core.object.ObjectController;
 import com.eova.core.task.TaskController;
 import com.eova.handler.UrlBanHandler;
 import com.eova.interceptor.AuthInterceptor;
-import com.eova.interceptor.JParaInterceptor;
 import com.eova.interceptor.LoginInterceptor;
-import com.eova.interceptor.MsqlInterceptor;
 import com.eova.model.Button;
 import com.eova.model.EovaLog;
 import com.eova.model.Menu;
@@ -85,7 +70,18 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
-import com.mysql.jdbc.Connection;
+import org.beetl.core.GroupTemplate;
+import org.beetl.ext.jfinal.BeetlRenderFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class EovaConfig extends JFinalConfig {
 
@@ -574,7 +570,6 @@ public class EovaConfig extends JFinalConfig {
 	/**
 	 * Eova Expression Mapping
 	 *
-	 * @param exps
 	 */
 	protected void exp() {
 		// Eova 系统功能需要的Exp

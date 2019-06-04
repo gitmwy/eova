@@ -6,14 +6,11 @@
  */
 package com.oss;
 
-import java.util.HashSet;
-
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.eova.config.EovaConfig;
 import com.eova.interceptor.JParaInterceptor;
 import com.eova.interceptor.LoginInterceptor;
-import com.eova.user.UserController;
 import com.jfinal.config.Interceptors;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
@@ -21,10 +18,11 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
-import com.mysql.jdbc.Connection;
-import com.oss.model.UserInfo;
 import com.oss.product.ProductController;
 import com.oss.test.XlsController;
+
+import java.sql.Connection;
+import java.util.HashSet;
 
 
 public class OSSConfig extends EovaConfig {
